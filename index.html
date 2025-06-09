@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Zoho Interview Questions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: linear-gradient(45deg, #1a1a1a, #2d3436, #2c3e50, #1e272e);
+            background-size: 300% 300%;
+            animation: gradientBG 15s ease infinite;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: rgba(30, 30, 30, 0.95);
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        pre {
+            background: #2d3436;
+            padding: 15px;
+            overflow-x: auto;
+            border-radius: 8px;
+            font-size: 32px;
+            line-height: 1.5;
+            margin: 20px 0;
+            border: 1px solid #404040;
+            color: #e0e0e0;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 20px;
+        }
+
+        .nav-buttons button {
+            flex: 1;
+            max-width: 300px;
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 20px 35px;
+            font-weight: bold;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-buttons button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(46, 204, 113, 0.4);
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+        }
+
+        .nav-buttons button:active {
+            transform: translateY(-2px) scale(0.98);
+        }
+
+        .nav-buttons button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.2),
+                    transparent);
+            transition: 0.5s;
+        }
+
+        .nav-buttons button:hover::before {
+            left: 100%;
+        }
+
+        .nav-buttons button:disabled {
+            background: linear-gradient(45deg, #2c3e50, #34495e);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            opacity: 0.7;
+        }
+
+        .nav-buttons button:disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 16px;
+            min-width: 120px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:disabled {
+            background: linear-gradient(45deg, #2c3e50, #34495e);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        h2 {
+            color: #3498db;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .options {
+            margin: 20px 0;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 100%;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            border: 2px solid #404040;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            background: #2d3436;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            font-size: 35px;
+            font-weight: 500;
+            min-height: 80px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .option:hover {
+            background: linear-gradient(45deg, #2d3436, #353b48);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            border-color: #3498db;
+        }
+
+        .option:active {
+            transform: translateY(1px);
+        }
+
+        .option.correct {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            border-color: #27ae60;
+            color: white;
+            animation: correctPulse 0.5s ease;
+        }
+
+        .option.incorrect {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            border-color: #c0392b;
+            color: white;
+            animation: incorrectShake 0.5s ease;
+        }
+
+        @keyframes correctPulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes incorrectShake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        .option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .option:hover::before {
+            transform: translateX(100%);
+        }
+
+        .show-answer {
+            background-color: #28a745;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto;
+            display: block;
+            font-size: 18px;
+            padding: 15px 30px;
+        }
+
+        .show-answer:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .show-answer:active {
+            transform: translateY(1px);
+        }
+
+        .explanation {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(45deg, #2c3e50, #34495e);
+            border-radius: 12px;
+            animation: fadeIn 0.5s ease;
+            border-left: 4px solid #3498db;
+            font-size: 16px;
+            line-height: 1.6;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            color: #fff;
+        }
+
+        .explanation strong {
+            font-size: 18px;
+            color: #3498db;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .options {
+                grid-template-columns: 1fr;
+            }
+
+            body {
+                margin: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div id="question-box">
+            <!-- Question content will be injected here -->
+        </div>
+        <div class="nav-buttons">
+            <button id="prevBtn" onclick="changeQuestion(-1)">Previous</button>
+            <button id="nextBtn" onclick="changeQuestion(1)">Next</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                title: "1. Branching and Looping",
+                code: `#include<stdio.h>
+
+void main() {
+  int i;
+  for(i=1;i<4;i++) {
+    switch(i) {
+      case 1: printf("%d", i); break;
+      case 2: printf("%d", i); break;
+      case 3: printf("%d", i); break;
+    }
+  }
+}`,
+                output: "123",
+                explanation: "The for loop runs from i=1 to i=3. The switch matches case 1, 2, and 3 respectively.",
+                options: ["321", "111", "123", "333"]
+            },
+            {
+                title: "2. Operators and Expressions",
+                code: `void main() {
+  char s = "\\12345s\\n";
+  printf("%d", sizeof(s));
+}`,
+                output: "1",
+                explanation: "Here, 's' is a char, so sizeof(s) returns 1.",
+                options: ["8", "6", "1", "2"]
+            },
+            {
+                title: "3. Functions with Recursion",
+                code: `int main() {
+  static int i = 3;
+  printf("%d", i--);
+  return i > 0 ? main() : 0;
+}`,
+                output: "321",
+                explanation: "Static variable 'i' retains value across recursive calls.",
+                options: ["123", "333", "111", "321"]
+            },
+            {
+                title: "4. Loop Output Edge Case",
+                code: `int main() {
+  for(int i = 0; i-- > -1; )
+    printf("%d", i);
+}`,
+                output: "-1",
+                explanation: "Loop starts with i = 0, checks `i-- > -1` → true once when i = 0, then breaks.",
+                options: ["0", "1", "No output", "-1"]
+            },
+            {
+                title: "5. Global vs Local",
+                code: `#include <iostream>
+using namespace std;
+
+int a = 20;
+
+int main() {
+  int a = 10;
+  cout << a << " " << ::a;
+  return 0;
+}`,
+                output: "10 20",
+                explanation: "`a` refers to local variable, `::a` accesses global variable.",
+                options: ["20 10", "10 10", "20 20", "10 20"]
+            },
+            {
+                title: "6. Pointer Arithmetic",
+                code: `#include <stdio.h>
+
+int main() {
+  int arr[] = {1, 2, 3, 4, 5};
+  int *p = arr;
+  printf("%d", *(p + 2));
+  return 0;
+}`,
+                output: "3",
+                explanation: "p points to first element, p+2 points to third element (index 2), which is 3.",
+                options: ["1", "5", "2", "3"]
+            },
+            {
+                title: "7. String Manipulation",
+                code: `#include <stdio.h>
+#include <string.h>
+
+int main() {
+  char str[] = "Hello";
+  printf("%d", strlen(str));
+  return 0;
+}`,
+                output: "5",
+                explanation: "strlen() returns length of string excluding null terminator.",
+                options: ["6", "4", "7", "5"]
+            },
+            {
+                title: "8. Array Initialization",
+                code: `#include <stdio.h>
+
+int main() {
+  int arr[5] = {1};
+  printf("%d", arr[3]);
+  return 0;
+}`,
+                output: "0",
+                explanation: "When array is partially initialized, remaining elements are set to 0.",
+                options: ["garbage", "1", "error", "0"]
+            },
+            {
+                title: "9. Bitwise Operations",
+                code: `#include <stdio.h>
+
+int main() {
+  int x = 5;
+  printf("%d", x << 1);
+  return 0;
+}`,
+                output: "10",
+                explanation: "Left shift by 1 multiplies by 2. 5 << 1 = 10",
+                options: ["5", "6", "4", "10"]
+            },
+            {
+                title: "10. Structure Padding",
+                code: `#include <stdio.h>
+
+struct test {
+  char a;
+  int b;
+  char c;
+};
+
+int main() {
+  printf("%d", sizeof(struct test));
+  return 0;
+}`,
+                output: "12",
+                explanation: "Due to structure padding, size is 12 bytes (1+3 padding+4+1+3 padding).",
+                options: ["6", "9", "8", "12"]
+            },
+            {
+                title: "11. Branching and Looping",
+                code: `void main() {
+  int i = 1;
+  printf("%d +1=%d", i, +i);
+}`,
+                output: "1-1 1-1",
+                explanation: "The expression evaluates to 1-1 and 1-1 due to operator precedence.",
+                options: ["2 2", "1 1", "0 0", "1-1 1-1"]
+            },
+            {
+                title: "12. Data Types",
+                code: `void main() {
+  char not;
+  not = 12;
+  printf("%d", not);
+}`,
+                output: "12",
+                explanation: "A char can store integer values, and 12 is within its range.",
+                options: ["error", "garbage", "0", "12"]
+            },
+            {
+                title: "13. Branching and Looping",
+                code: `#define FALSE -1
+#define TRUE 1
+#define NULL 0
+
+void main() {
+  if(NULL)
+    puts("NULL");
+  else if(FALSE)
+    puts("TRUE");
+  else
+    puts("FALSE");
+}`,
+                output: "TRUE",
+                explanation: "NULL is 0 (false), FALSE is -1 (true), so second condition is true.",
+                options: ["FALSE", "NULL", "Error", "TRUE"]
+            },
+            {
+                title: "14. Operators and Expressions",
+                code: `void main() {
+  int k = 1;
+  printf("%d-1 is %s", k, k-1 ? "TRUE" : "FALSE");
+}`,
+                output: "1-1 is TRUE",
+                explanation: "k-1 is 0, which is false in C, so FALSE is printed.",
+                options: ["1-1 is FALSE", "0 is TRUE", "0 is FALSE", "1-1 is TRUE"]
+            },
+            {
+                title: "15. Branching and Looping",
+                code: `int main() {
+  int t, i;
+  for(t=4; scanf("%d",&i)==t; printf("%d\n",i))
+    printf("%d--", t--);
+}`,
+                output: "no output",
+                explanation: "The loop condition scanf returns number of successful reads.",
+                options: ["infinite loop", "error", "loop runs 4 times", "no output"]
+            },
+            {
+                title: "16. Structures and Unions",
+                code: `struct emp {
+  int len;
+  char name[1];
+};
+
+int main() {
+  char newname[] = "Rahul";
+  struct emp *p = (struct emp *)malloc(sizeof(struct emp) - 1 + strlen(newname) + 1);
+  p->len = strlen(newname);
+  strcpy(p->name, newname);
+  printf("%d %s", p->len, p->name);
+  return 0;
+}`,
+                output: "5 Rahul",
+                explanation: "Flexible array member technique to store string in structure.",
+                options: ["4 Rahul", "error", "garbage", "5 Rahul"]
+            },
+            {
+                title: "17. Data Types",
+                code: `void main() {
+  float a;
+  a = 4/2;
+  printf("%f %f", a, 4/2);
+}`,
+                output: "2.000000 0.000000",
+                explanation: "Integer division 4/2 gives 2, but 4/2 in printf is integer division.",
+                options: ["2.000000 2.000000", "0.000000 0.000000", "error", "2.000000 0.000000"]
+            },
+            {
+                title: "18. Operators and Expressions",
+                code: `void main() {
+  printf("%d", sizeof(4)/sizeof(2.0));
+  printf("%d", sizeof(2.0)/sizeof(4));
+}`,
+                output: "0 2",
+                explanation: "sizeof(4) is 4, sizeof(2.0) is 8, so first is 0, second is 2.",
+                options: ["2 0", "1 1", "error", "0 2"]
+            },
+            {
+                title: "19. Pattern Printing",
+                code: `#include <iostream>
+using namespace std;
+
+int main() {
+  int i, j, var = 'A';
+  for (i = 5; i >= 1; i--) {
+    for (j = 0; j < i; j++)
+      printf("%c ", (var + j));
+    printf("\n");
+  }
+  return 0;
+}`,
+                output: "A B C D E A B C D A B C A B A",
+                explanation: "Prints decreasing pattern of letters starting from A.",
+                options: ["A B C D E B C D E C D E D E E", "E D C B A D C B A C B A B A A", "A A B A B C A B C D A B C D E", "A B C D E A B C D A B C A B A"]
+            },
+            {
+                title: "20. Pointers and Arrays",
+                code: `#include <stdio.h>
+void f(char**);
+
+int main() {
+  char *argv[] = { "ab", "cd", "ef", "gh", "ij", "kl" };
+  f(argv);
+  return 0;
+}
+
+void f(char **p) {
+  char *t;
+  t = (p += sizeof(int))[-1];
+  printf("%s\n", t);
+}`,
+                output: "gh",
+                explanation: "Pointer arithmetic with array of strings.",
+                options: ["ef", "ij", "kl", "gh"]
+            },
+            {
+                title: "21. Variable Arguments",
+                code: `#include <stdio.h>
+void dynamic(int s, ...) {
+  printf("%d ", s);
+}
+
+int main() {
+  dynamic(2, 4, 6, 8);
+  dynamic(3, 6, 9);
+  return 0;
+}`,
+                output: "2 3",
+                explanation: "Variable arguments function prints first argument only.",
+                options: ["2 4 6 8 3 6 9", "error", "no output", "2 3"]
+            },
+            {
+                title: "22. Function Pointers",
+                code: `#include <stdio.h>
+int main() {
+  void demo();
+  void (*fun)();
+  fun = demo;
+  (*fun)();
+  fun();
+  return 0;
+}
+
+void demo() {
+  printf("program ");
+}`,
+                output: "program program",
+                explanation: "Both function pointer calls execute the same function.",
+                options: ["program", "error", "no output", "program program"]
+            },
+            {
+                title: "23. String Length",
+                code: `#include <stdio.h>
+int main() {   
+  char str1[] = "ZohoInterview";
+  char str2[] = {'t', 'e', 's', 't', 't', 'e', 's', 't', '1'};
+  int n1 = sizeof(str1)/sizeof(str1[0]);
+  int n2 = sizeof(str2)/sizeof(str2[0]);
+  printf("n1 = %d, n2 = %d", n1, n2);
+  return 0;
+}`,
+                output: "n1 = 14, n2 = 9",
+                explanation: "str1 includes null terminator, str2 doesn't.",
+                options: ["n1 = 13, n2 = 9", "n1 = 14, n2 = 10", "error", "n1 = 14, n2 = 9"]
+            },
+            {
+                title: "24. Global vs Local",
+                code: `#include <iostream>
+using namespace std;
+
+int a = 20;
+
+int main() {
+  int a = 10;
+  std::cout << a << " " << ::a;
+  return 0;
+}`,
+                output: "10 20",
+                explanation: "Local variable shadows global, ::a accesses global.",
+                options: ["20 10", "10 10", "20 20", "10 20"]
+            },
+            {
+                title: "25. Pointers and Functions",
+                code: `#include<iostream>
+
+void func(int *b) {
+  *b = 1;
+}
+
+int main() {
+  int *a;
+  int n;
+  a = &n;
+  *a = 0;
+  func(a);
+  std::cout << *a << std::endl;
+  return 0;
+}`,
+                output: "1",
+                explanation: "Pointer passed to function modifies value at address.",
+                options: ["0", "garbage", "error", "1"]
+            },
+            {
+                title: "26. Class Size",
+                code: `#include <iostream>
+using namespace std;
+
+class Test {
+  static int i;
+  int j;
+};
+
+int Test::i;
+
+int main() {
+  cout << sizeof(Test);
+  return 0;
+}`,
+                output: "4",
+                explanation: "Static members don't contribute to object size.",
+                options: ["8", "12", "error", "4"]
+            },
+            {
+                title: "27. Pointer Arithmetic",
+                code: `#include <stdio.h>
+
+int main() {
+  int i;
+  char ch[] = {'z','o','h','o'};
+  char *ptr, *str1;
+  ptr = ch;
+  str1 = ch;
+  i = (*ptr-- + ++*str1) - 10;
+  printf("%d", i);
+  return 0;
+}`,
+                output: "235",
+                explanation: "Complex pointer arithmetic with character array.",
+                options: ["245", "225", "error", "235"]
+            },
+            {
+                title: "28. 2D Arrays",
+                code: `int main() {
+  int a[10][10] = {{1,2},{3,4},{5,6},{7,8},{9,10}};
+  int *p = a[3];
+  int result = (*p + 2) * a[4][1] + (++*p) + (*p + 7);
+  printf("%d", result);
+  return 0;
+}`,
+                output: "113",
+                explanation: "Complex pointer arithmetic with 2D array.",
+                options: ["123", "103", "error", "113"]
+            },
+            {
+                title: "29. Switch Case",
+                code: `switch(5) {
+  default: printf("five");
+  case 1: printf("one");
+}`,
+                output: "fiveone",
+                explanation: "Default case executes, then falls through to case 1.",
+                options: ["five", "one", "error", "fiveone"]
+            },
+            {
+                title: "30. If Condition",
+                code: `if(101)
+  printf("hai");
+else
+  printf("all");`,
+                output: "hai",
+                explanation: "Non-zero value is true in C.",
+                options: ["all", "error", "no output", "hai"]
+            },
+            {
+                title: "31. For Loop",
+                code: `for(i=0; i<5; i++);
+printf("%d", i);`,
+                output: "5",
+                explanation: "Empty loop body with semicolon.",
+                options: ["4", "6", "error", "5"]
+            },
+            {
+                title: "32. Printf Format",
+                code: `void main() {
+  int a=10, b=20, c=30;
+  printf("%d%d");
+}`,
+                output: "Undefined behavior",
+                explanation: "Missing arguments in printf.",
+                options: ["10 20", "garbage", "error", "Undefined behavior"]
+            },
+            {
+                title: "33. Switch Case Fall Through",
+                code: `main() {
+  int i=0;
+  switch(i) {
+    case 0: i++;
+            printf("%d", i);
+    case 1: printf("%d", i);
+    case 2: printf("%d", i);
+  }
+}`,
+                output: "111",
+                explanation: "Case 0 falls through to case 1 and 2.",
+                options: ["123", "000", "error", "111"]
+            },
+            {
+                title: "34. Escape Sequences",
+                code: `void main() {
+  printf("\n98");
+  printf("\b76");
+  printf("\r54");
+}`,
+                output: "\\r54",
+                explanation: "Escape sequences affect cursor position.",
+                options: ["987654", "54", "error", "\\r54"]
+            },
+            {
+                title: "35. If Statement",
+                code: `int main() {
+  int x=3;
+  if(x==2); x=0;
+  if(x==3) x++;
+  else
+    printf("x=%d",x);
+}`,
+                output: "x=0",
+                explanation: "Empty if body with semicolon.",
+                options: ["0", "3", "error", "x=0"]
+            },
+            {
+                title: "36. Escape Characters",
+                code: `int main() {
+  printf(" \" hai %% all \" ");
+}`,
+                output: "\" hai % all \"",
+                explanation: "Escape sequences for quotes and percent.",
+                options: ["hai all", "error", "no output", "\" hai % all \""]
+            },
+            {
+                title: "37. Sum of Even Numbers",
+                code: `#include <stdio.h>
+    int main() {
+        int sum = 0;
+        for(int i = 1; i <= 10; i++) {
+            if(i % 2 == 0)
+            sum += i;
+            }
+            printf("%d", sum);
+            return 0;
+            }`,
+                output: "30",
+                explanation: "Sums even numbers from 1 to 10: 2+4+6+8+10 = 30.",
+                options: ["30", "25", "55", "20"]
+            },
+            {
+                title: "38. Reverse a Number",
+                code: `#include <stdio.h>
+    int main() {
+    int n = 123, rev = 0;
+    while(n > 0) {
+        rev = rev * 10 + n % 10;
+        n = n / 10;
+        }
+        printf("%d", rev);
+        return 0;
+        }`,
+                output: "321",
+                explanation: "Reverses 123 to get 321 using mod and division.",
+                options: ["321", "123", "312", "None"]
+            },
+            {
+                title: "39. Count Digits",
+                code: `#include <stdio.h>
+    int main() {
+        int n = 9876, count = 0;
+        while(n != 0) {
+            n = n / 10;
+            count++;
+            }
+            printf("%d", count);
+            return 0;
+            }`,
+                output: "4",
+                explanation: "Loops through digits, increments count — total 4 digits.",
+                options: ["4", "3", "5", "2"]
+            },
+            {
+                title: "40. Find Maximum of Array",
+                code: `#include <stdio.h>
+    int main() {
+        int a[] = {3, 5, 7, 2, 8};
+        int max = a[0];
+        for(int i = 1; i < 5; i++) {
+            if(a[i] > max)
+            max = a[i];
+        }
+            printf("%d", max);
+            return 0;
+        }`,
+                output: "8",
+                explanation: "Scans the array for largest element, stores in max.",
+                options: ["8", "7", "5", "2"]
+            },
+            {
+                title: "41. Function to Square a Number",
+    code: `#include <stdio.h>
+    int square(int x) {
+        return x * x;
+    }
+    int main() {
+        int result = square(6);
+        printf("%d", result);
+        return 0;
+    }`,
+                output: "36",
+                explanation: "Calls square(6), returns 36.",
+                options: ["36", "12", "18", "6"]
+            }
+
+        ];
+
+        let currentIndex = 0;
+
+        // Add shuffle function
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function renderQuestion(index) {
+            const q = questions[index];
+            // Create a copy of options and shuffle them
+            const shuffledOptions = shuffleArray([...q.options]);
+
+            document.getElementById("question-box").innerHTML = `
+        <h2>${q.title}</h2>
+        <pre><code>${q.code}</code></pre>
+        <div class="options">
+          ${shuffledOptions.map((option, i) => `
+            <div class="option" onclick="checkAnswer(${index}, '${option}')">
+              ${option}
+            </div>
+          `).join('')}
+        </div>
+        <div id="explanation-${index}" class="explanation" style="display: none;">
+          <p><strong>Output:</strong> ${q.output}</p>
+          <p><strong>Explanation:</strong> ${q.explanation}</p>
+        </div>
+      `;
+
+            document.getElementById("prevBtn").disabled = index === 0;
+            document.getElementById("nextBtn").disabled = index === questions.length - 1;
+        }
+
+        function checkAnswer(questionIndex, selectedAnswer) {
+            const question = questions[questionIndex];
+            const options = document.querySelectorAll(`#question-box .option`);
+            const explanation = document.getElementById(`explanation-${questionIndex}`);
+
+            // Show the explanation immediately
+            explanation.style.display = 'block';
+
+            // Remove any existing classes
+            options.forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+            });
+
+            // Highlight the correct answer
+            options.forEach(option => {
+                if (option.textContent.trim() === question.output) {
+                    option.classList.add('correct');
+                }
+                // If this is the selected answer and it's wrong, mark it as incorrect
+                if (option.textContent.trim() === selectedAnswer && selectedAnswer !== question.output) {
+                    option.classList.add('incorrect');
+                }
+            });
+
+            // Disable all options after selection
+            options.forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+        }
+
+        function changeQuestion(direction) {
+            currentIndex += direction;
+            if (currentIndex < 0) currentIndex = 0;
+            if (currentIndex >= questions.length) currentIndex = questions.length - 1;
+            renderQuestion(currentIndex);
+        }
+
+        // Add a refresh button to the HTML
+        document.querySelector('.nav-buttons').insertAdjacentHTML('beforeend', `
+          <button onclick="renderQuestion(currentIndex)" style="background-color: #28a745;">
+            Shuffle Options
+          </button>
+        `);
+
+        // Initial render
+        renderQuestion(currentIndex);
+    </script>
+
+</body>
+
+</html>
