@@ -309,17 +309,263 @@
                 margin: 20px;
             }
         }
+
+        .team-scoreboard {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(45, 52, 54, 0.8);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .team {
+            text-align: center;
+            padding: 15px 30px;
+            background: rgba(30, 30, 30, 0.8);
+            border-radius: 10px;
+            min-width: 200px;
+        }
+
+        .team h3 {
+            color: #3498db;
+            margin: 0 0 10px 0;
+            font-size: 24px;
+        }
+
+        .team .score {
+            font-size: 36px;
+            font-weight: bold;
+            color: #2ecc71;
+            margin: 10px 0;
+        }
+
+        .score-btn {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .score-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .score-btn:active {
+            transform: translateY(1px);
+        }
+
+        .boys {
+            border: 2px solid #3498db;
+        }
+
+        .girls {
+            border: 2px solid #e84393;
+        }
+
+        .firecracker {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: explode 1s ease-out forwards;
+            z-index: 999;
+            pointer-events: none;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: translate(var(--x), var(--y)) scale(0);
+                opacity: 1;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), var(--y)) scale(20);
+                opacity: 0;
+            }
+        }
+
+        .spark {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            animation: spark 1s ease-out forwards;
+            z-index: 999;
+            pointer-events: none;
+        }
+
+        @keyframes spark {
+            0% {
+                transform: translate(var(--x), var(--y)) rotate(var(--angle)) translateX(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), var(--y)) rotate(var(--angle)) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        .winner-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.5s ease;
+            overflow: hidden;
+        }
+
+        .winner-content {
+            background: linear-gradient(45deg, #1a1a1a, #2d3436);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 80%;
+            border: 2px solid #3498db;
+            box-shadow: 0 0 50px rgba(52, 152, 219, 0.3);
+            animation: winnerPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            z-index: 1001;
+            pointer-events: auto;
+        }
+
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1002;
+            overflow: hidden;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            animation: confetti-fall 3s linear infinite;
+            pointer-events: none;
+            z-index: 1002;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translate(var(--x), -10vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), 110vh) rotate(360deg);
+                opacity: 0.7;
+            }
+        }
+
+        .winner-content h2 {
+            font-size: 48px;
+            color: #2ecc71;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+        }
+
+        .winner-content p {
+            font-size: 32px;
+            color: #fff;
+            margin: 20px 0;
+        }
+
+        .winner-content .score {
+            font-size: 72px;
+            color: #f1c40f;
+            margin: 30px 0;
+            text-shadow: 0 0 15px rgba(241, 196, 15, 0.5);
+        }
+
+        .winner-content button {
+            font-size: 24px;
+            padding: 15px 40px;
+            margin-top: 20px;
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .winner-content button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(46, 204, 113, 0.4);
+        }
+
+        .finish-btn {
+            background: linear-gradient(45deg, #e74c3c, #c0392b) !important;
+            font-size: 24px !important;
+            padding: 20px 35px !important;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(231, 76, 60, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(231, 76, 60, 0);
+            }
+        }
     </style>
 </head>
 
 <body>
+    <audio id="winnerAudio" src="audio/fireCrackers.mp3" preload="auto"></audio>
+    <div class="winner-popup" id="winnerPopup">
+        <div class="winner-content">
+            <h2>🎉 Congratulations! 🎉</h2>
+            <p>The Winner is:</p>
+            <div class="score" id="winnerTeam"></div>
+            <p>Final Scores:</p>
+            <p>Boys Team: <span id="finalBoysScore">0</span></p>
+            <p>Girls Team: <span id="finalGirlsScore">0</span></p>
+            <button onclick="resetContest()">Start New Contest</button>
+        </div>
+    </div>
 
     <div class="container">
+        <div class="team-scoreboard">
+            <div class="team boys">
+                <h3>Boys Team</h3>
+                <div class="score">0</div>
+                <button onclick="updateScore('boys')" class="score-btn">+1 Point</button>
+            </div>
+            <div class="team girls">
+                <h3>Girls Team</h3>
+                <div class="score">0</div>
+                <button onclick="updateScore('girls')" class="score-btn">+1 Point</button>
+            </div>
+        </div>
         <div id="question-box">
             <!-- Question content will be injected here -->
         </div>
         <div class="nav-buttons">
             <button id="prevBtn" onclick="changeQuestion(-1)">Previous</button>
+            <button id="finishBtn" onclick="finishContest()" class="finish-btn">Finish Contest</button>
             <button id="nextBtn" onclick="changeQuestion(1)">Next</button>
         </div>
     </div>
@@ -378,7 +624,7 @@ void main() {
             {
                 title: "5. Global vs Local",
                 code: `#include <iostream>
-using namespace std;
+using namespace std;    
 
 int a = 20;
 
@@ -942,6 +1188,17 @@ printf("%d", i);`,
 
             document.getElementById("prevBtn").disabled = index === 0;
             document.getElementById("nextBtn").disabled = index === questions.length - 1;
+            document.getElementById("finishBtn").disabled = false;
+        }
+
+        let teamScores = {
+            boys: 0,
+            girls: 0
+        };
+
+        function updateScore(team) {
+            teamScores[team]++;
+            document.querySelector(`.team.${team} .score`).textContent = teamScores[team];
         }
 
         function checkAnswer(questionIndex, selectedAnswer) {
@@ -972,12 +1229,181 @@ printf("%d", i);`,
             options.forEach(option => {
                 option.style.pointerEvents = 'none';
             });
+
+            // Don't automatically update score - let the teacher decide which team gets the point
+        }
+
+        let celebrationInterval = null;
+        let audioInterval = null;
+
+        function cleanupCelebration() {
+            // Clear all intervals
+            if (celebrationInterval) {
+                clearInterval(celebrationInterval);
+                celebrationInterval = null;
+            }
+            if (audioInterval) {
+                clearInterval(audioInterval);
+                audioInterval = null;
+            }
+            
+            // Remove all effects
+            document.querySelectorAll('.confetti-container, .firecracker, .spark').forEach(e => e.remove());
+            
+            // Stop and reset audio
+            const audio = document.getElementById('winnerAudio');
+            audio.pause();
+            audio.currentTime = 0;
+        }
+
+        function createConfetti() {
+            // Remove existing confetti container if any
+            const existingContainer = document.querySelector('.confetti-container');
+            if (existingContainer) {
+                existingContainer.remove();
+            }
+
+            // Create new container
+            const container = document.createElement('div');
+            container.className = 'confetti-container';
+            document.body.appendChild(container);
+
+            const colors = ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff'];
+            const width = window.innerWidth;
+            
+            // Create more confetti for better coverage
+            for (let i = 0; i < 200; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                // Distribute confetti across the entire width
+                const x = Math.random() * width;
+                confetti.style.setProperty('--x', `${x}px`);
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                container.appendChild(confetti);
+            }
+        }
+
+        function createFirecrackers() {
+            const colors = ['#ff0000', '#ffd700', '#ff69b4', '#00ff00', '#ff4500', '#ffa500'];
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            const spread = 200; // Reduced spread for more centered effect
+            
+            // Create multiple firecrackers at different positions
+            for (let i = 0; i < 5; i++) {
+                const x = centerX + (Math.random() - 0.5) * spread;
+                const y = centerY + (Math.random() - 0.5) * spread;
+                
+                // Create the main explosion
+                const firecracker = document.createElement('div');
+                firecracker.className = 'firecracker';
+                firecracker.style.setProperty('--x', `${x}px`);
+                firecracker.style.setProperty('--y', `${y}px`);
+                firecracker.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                document.body.appendChild(firecracker);
+
+                // Create sparks
+                for (let j = 0; j < 12; j++) {
+                    const spark = document.createElement('div');
+                    spark.className = 'spark';
+                    spark.style.setProperty('--x', `${x}px`);
+                    spark.style.setProperty('--y', `${y}px`);
+                    spark.style.setProperty('--angle', `${j * 30}deg`);
+                    spark.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    document.body.appendChild(spark);
+                }
+
+                // Remove elements after animation
+                setTimeout(() => {
+                    firecracker.remove();
+                    document.querySelectorAll('.spark').forEach(s => s.remove());
+                }, 1000);
+            }
+        }
+
+        function showWinnerPopup() {
+            // Clean up any existing celebration first
+            cleanupCelebration();
+
+            const popup = document.getElementById('winnerPopup');
+            const winnerTeam = teamScores.boys > teamScores.girls ? 'Boys Team' : 
+                             teamScores.girls > teamScores.boys ? 'Girls Team' : 'It\'s a Tie!';
+            
+            document.getElementById('winnerTeam').textContent = winnerTeam;
+            document.getElementById('finalBoysScore').textContent = teamScores.boys;
+            document.getElementById('finalGirlsScore').textContent = teamScores.girls;
+            
+            // Play audio and show popup
+            const audio = document.getElementById('winnerAudio');
+            audio.currentTime = 0;
+            
+            // Start the celebration
+            popup.style.display = 'flex';
+            
+            // Initial effects
+            createConfetti();
+            createFirecrackers();
+
+            // Set up celebration interval
+            let timeElapsed = 0;
+            celebrationInterval = setInterval(() => {
+                timeElapsed += 2;
+                
+                if (timeElapsed <= 10) {
+                    createFirecrackers();
+                    if (timeElapsed % 3 === 0) {
+                        createConfetti();
+                    }
+                } else {
+                    cleanupCelebration();
+                }
+            }, 2000);
+
+            // Set up audio loop
+            const playAudio = () => {
+                audio.currentTime = 0;
+                audio.play().catch(e => console.log("Audio play failed:", e));
+            };
+
+            playAudio(); // Play first time
+            audioInterval = setInterval(playAudio, 3000); // Loop every 3 seconds
+
+            // Stop everything after 10 seconds
+            setTimeout(cleanupCelebration, 10000);
+        }
+
+        function resetContest() {
+            // Clean up celebration
+            cleanupCelebration();
+            
+            // Reset scores
+            teamScores.boys = 0;
+            teamScores.girls = 0;
+            document.querySelector('.team.boys .score').textContent = '0';
+            document.querySelector('.team.girls .score').textContent = '0';
+            
+            // Hide popup
+            const popup = document.getElementById('winnerPopup');
+            popup.style.display = 'none';
+            
+            // Reset to first question
+            currentIndex = 0;
+            renderQuestion(currentIndex);
+        }
+
+        function finishContest() {
+            if (confirm("Are you sure you want to finish the contest and announce the winner?")) {
+                showWinnerPopup();
+            }
         }
 
         function changeQuestion(direction) {
             currentIndex += direction;
             if (currentIndex < 0) currentIndex = 0;
-            if (currentIndex >= questions.length) currentIndex = questions.length - 1;
+            if (currentIndex >= questions.length) {
+                currentIndex = questions.length - 1;
+            }
             renderQuestion(currentIndex);
         }
 
@@ -990,6 +1416,9 @@ printf("%d", i);`,
 
         // Initial render
         renderQuestion(currentIndex);
+
+        // Clean up on page unload
+        window.addEventListener('beforeunload', cleanupCelebration);
     </script>
 
 </body>
