@@ -778,7 +778,7 @@ void main() {
 
 int main() {
   char newname[] = "Rahul";
-  struct emp *p = (struct emp *)malloc(sizeof(struct emp) - 1 + strlen(newname) + 1);
+  struct emp *p = (struct emp *)malloc(sizeof(struct emp) - 1 \n + strlen(newname) + 1);
   p->len = strlen(newname);
   strcpy(p->name, newname);
   printf("%d %s", p->len, p->name);
