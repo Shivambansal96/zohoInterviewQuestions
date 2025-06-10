@@ -1312,14 +1312,16 @@
                 }
                 
                 const data = await response.json();
-                console.log('Questions loaded successfully:', data);
+                console.log('Questions loaded successfully. Raw data:', data);
+                console.log('Number of questions in data:', data.questions ? data.questions.length : 0);
                 
                 if (!data || !data.questions || !Array.isArray(data.questions)) {
                     throw new Error('Invalid questions data format');
                 }
                 
                 questions = data.questions;
-                console.log(`Loaded ${questions.length} questions`);
+                console.log(`Loaded ${questions.length} questions. Question titles:`, 
+                    questions.map((q, i) => `${i + 1}: ${q.title}`).join('\n'));
                 
                 // Initialize the quiz after loading questions
                 initializeUnansweredQuestions();
@@ -1399,27 +1401,59 @@
                     throw new Error('Invalid question data');
                 }
 
+                console.log(`Rendering question ${index + 1}:`, {
+                    title: q.title,
+                    options: q.options,
+                    output: q.output
+                });
+
                 // Update current index
                 currentIndex = index;
                 
                 // Create a copy of options and shuffle them
                 const shuffledOptions = shuffleArray([...q.options]);
+                console.log('Shuffled options:', shuffledOptions);
 
                 const normalizedOutput = formatTextContent(q.output || '');
                 const normalizedTitle = formatTextContent(q.title || 'Question ' + (index + 1));
                 const formattedCode = formatCode(q.code || '');
 
+                // Check if this question has been answered
+                const isAnswered = answeredQuestions.has(index);
+                console.log(`Question ${index + 1} is ${isAnswered ? 'answered' : 'unanswered'}`);
+
+                // Create options HTML with proper escaping and event handling
+                const optionsHTML = shuffledOptions.map((option, i) => {
+                    // Properly escape the option text for HTML and JavaScript
+                    const escapedOption = option
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')
+                        .replace(/"/g, '&quot;')
+                        .replace(/'/g, '&#039;');
+                    
+                    // Create a safe onclick handler
+                    const onclickHandler = isAnswered ? 
+                        '' : 
+                        `onclick="handleOptionClick(${index}, '${escapedOption}')"`;
+                    
+                    return `
+                        <div class="option ${isAnswered ? 'disabled' : ''}" 
+                             ${onclickHandler}
+                             data-option="${escapedOption}"
+                             style="pointer-events: ${isAnswered ? 'none' : 'auto'}">
+                            ${option}
+                        </div>
+                    `;
+                }).join('');
+
                 document.getElementById("question-box").innerHTML = `
                     <h2>${normalizedTitle}</h2>
                     <pre><code>${formattedCode}</code></pre>
                     <div class="options">
-                        ${shuffledOptions.map((option, i) => `
-                            <div class="option" onclick="checkAnswer(${index}, '${option.replace(/'/g, "\\'")}')">
-                                ${option}
-                            </div>
-                        `).join('')}
+                        ${optionsHTML}
                     </div>
-                    <div id="explanation-${index}" class="explanation" style="display: none;">
+                    <div id="explanation-${index}" class="explanation" style="display: ${isAnswered ? 'block' : 'none'}">
                         <p><strong>Output:</strong> ${normalizedOutput}</p>
                         <p><strong>Explanation:</strong> ${formatTextContent(q.explanation || '')}</p>
                     </div>
@@ -1433,7 +1467,7 @@
                 // Update unanswered sidebar to highlight current question
                 updateUnansweredSidebar();
                 
-                // Add some CSS to ensure proper code formatting
+                // Add some CSS to ensure proper code formatting and option styling
                 const style = document.createElement('style');
                 style.textContent = `
                     pre code {
@@ -1450,6 +1484,21 @@
                         border: 1px solid var(--option-border);
                         overflow-x: auto;
                         margin: 20px 0;
+                    }
+                    .option {
+                        cursor: pointer !important;
+                        user-select: none;
+                        transition: all 0.3s ease;
+                    }
+                    .option:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                    }
+                    .option.disabled {
+                        opacity: 0.7;
+                        cursor: not-allowed !important;
+                        transform: none !important;
+                        box-shadow: none !important;
                     }
                 `;
                 document.head.appendChild(style);
@@ -1469,7 +1518,8 @@
         // Initialize unanswered questions
         function initializeUnansweredQuestions() {
             console.log('Initializing unanswered questions...');
-            console.log('Total questions:', questions.length);
+            console.log('Total questions available:', questions.length);
+            console.log('Questions array:', questions);
             
             unansweredQuestions.clear();
             answeredQuestions.clear();
@@ -1477,9 +1527,11 @@
             // Add all questions to unanswered set
             for (let i = 0; i < questions.length; i++) {
                 unansweredQuestions.add(i);
+                console.log(`Added question ${i + 1} to unanswered set`);
             }
             
             console.log('Unanswered questions initialized:', Array.from(unansweredQuestions));
+            console.log('Total unanswered questions:', unansweredQuestions.size);
             updateUnansweredSidebar();
         }
 
@@ -1489,15 +1541,14 @@
             
             // Update count
             count.textContent = unansweredQuestions.size;
-            
-            // Sort questions by number and update list
-            const sortedQuestions = Array.from(unansweredQuestions).sort((a, b) => a - b);
-            console.log('Updating sidebar with questions:', sortedQuestions);
+            console.log('Updating sidebar. Total questions:', questions.length);
+            console.log('Unanswered questions:', Array.from(unansweredQuestions));
             
             // Create list of all questions, not just unanswered ones
             sidebar.innerHTML = Array.from({ length: questions.length }, (_, i) => {
                 const isUnanswered = unansweredQuestions.has(i);
                 const isCurrent = i === currentIndex;
+                console.log(`Question ${i + 1}: isUnanswered=${isUnanswered}, isCurrent=${isCurrent}`);
                 return `
                     <div class="unanswered-item ${isCurrent ? 'current' : ''} ${isUnanswered ? 'unanswered' : 'answered'}" 
                          onclick="goToQuestion(${i})">
@@ -1520,8 +1571,30 @@
             document.querySelector('.score-display .score').textContent = currentScore;
         }
 
+        // New function to handle option clicks
+        function handleOptionClick(questionIndex, selectedOption) {
+            console.log('Option clicked:', {
+                questionIndex,
+                selectedOption,
+                question: questions[questionIndex]
+            });
+            checkAnswer(questionIndex, selectedOption);
+        }
+
         function checkAnswer(questionIndex, selectedAnswer) {
+            console.log('Checking answer:', {
+                questionIndex,
+                selectedAnswer,
+                question: questions[questionIndex],
+                isQuestion15: questionIndex === 14 // 0-based index for Question 15
+            });
+            
             const question = questions[questionIndex];
+            if (!question) {
+                console.error('Invalid question index:', questionIndex);
+                return;
+            }
+
             const options = document.querySelectorAll(`#question-box .option`);
             const explanation = document.getElementById(`explanation-${questionIndex}`);
 
@@ -1537,17 +1610,47 @@
             const normalizedOutput = question.output.replace(/\\n/g, '\n').trim();
             const normalizedSelected = selectedAnswer.replace(/\\n/g, '\n').trim();
 
+            // Special logging for Question 15
+            if (questionIndex === 14) {
+                console.log('Question 15 comparison details:', {
+                    rawOutput: question.output,
+                    normalizedOutput,
+                    rawSelected: selectedAnswer,
+                    normalizedSelected,
+                    allOptions: Array.from(options).map(o => ({
+                        text: o.textContent.trim(),
+                        raw: o.textContent,
+                        dataOption: o.getAttribute('data-option')
+                    }))
+                });
+            }
+
+            console.log('Comparing answers:', {
+                normalizedOutput,
+                normalizedSelected,
+                options: Array.from(options).map(o => ({
+                    text: o.textContent.trim(),
+                    matchesOutput: o.textContent.trim() === normalizedOutput,
+                    matchesSelected: o.textContent.trim() === normalizedSelected
+                }))
+            });
+
             // Highlight the correct answer and check if selected answer is correct
             let isCorrect = false;
             options.forEach(option => {
                 const optionText = option.textContent.trim();
+                
                 if (optionText === normalizedOutput) {
+                    console.log('Found correct answer:', optionText);
                     option.classList.add('correct');
                 }
                 if (optionText === normalizedSelected) {
+                    console.log('Found selected answer:', optionText);
                     if (normalizedSelected === normalizedOutput) {
+                        console.log('Answer is correct!');
                         isCorrect = true;
                     } else {
+                        console.log('Answer is incorrect');
                         option.classList.add('incorrect');
                     }
                 }
@@ -1555,6 +1658,7 @@
 
             // Update score if answer is correct and question hasn't been answered before
             if (isCorrect && !answeredQuestions.has(questionIndex)) {
+                console.log('Updating score for correct answer');
                 updateScore();
                 answeredQuestions.add(questionIndex);
             }
@@ -1567,7 +1671,9 @@
 
             // Disable all options after selection
             options.forEach(option => {
+                option.classList.add('disabled');
                 option.style.pointerEvents = 'none';
+                option.onclick = null; // Remove click handler
             });
         }
 
