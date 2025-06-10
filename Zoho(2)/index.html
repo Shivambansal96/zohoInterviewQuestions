@@ -1404,15 +1404,19 @@
                 console.log(`Rendering question ${index + 1}:`, {
                     title: q.title,
                     options: q.options,
-                    output: q.output
+                    output: q.output,
+                    isAnswered: answeredQuestions.has(index)
                 });
 
                 // Update current index
                 currentIndex = index;
                 
-                // Create a copy of options and shuffle them
-                const shuffledOptions = shuffleArray([...q.options]);
-                console.log('Shuffled options:', shuffledOptions);
+                // Create a copy of options and shuffle them only if not answered
+                const shuffledOptions = answeredQuestions.has(index) ? 
+                    [...q.options] : // Keep original order for answered questions
+                    shuffleArray([...q.options]);
+                
+                console.log('Options:', shuffledOptions);
 
                 const normalizedOutput = formatTextContent(q.output || '');
                 const normalizedTitle = formatTextContent(q.title || 'Question ' + (index + 1));
@@ -1421,6 +1425,10 @@
                 // Check if this question has been answered
                 const isAnswered = answeredQuestions.has(index);
                 console.log(`Question ${index + 1} is ${isAnswered ? 'answered' : 'unanswered'}`);
+
+                // Get the previously selected answer if any
+                const selectedAnswer = localStorage.getItem(`selected_answer_${index}`);
+                const isCorrect = localStorage.getItem(`is_correct_${index}`) === 'true';
 
                 // Create options HTML with proper escaping and event handling
                 const optionsHTML = shuffledOptions.map((option, i) => {
@@ -1432,17 +1440,35 @@
                         .replace(/"/g, '&quot;')
                         .replace(/'/g, '&#039;');
                     
-                    // Create a safe onclick handler
+                    // Determine option classes
+                    let optionClasses = ['option'];
+                    if (isAnswered) {
+                        optionClasses.push('disabled');
+                        // Mark the user's selected answer
+                        if (option === selectedAnswer) {
+                            optionClasses.push(isCorrect ? 'correct' : 'incorrect');
+                        }
+                        // Mark the correct answer
+                        if (option === normalizedOutput) {
+                            optionClasses.push('correct');
+                        }
+                    }
+                    
+                    // Create a safe onclick handler only if not answered
                     const onclickHandler = isAnswered ? 
                         '' : 
                         `onclick="handleOptionClick(${index}, '${escapedOption}')"`;
                     
                     return `
-                        <div class="option ${isAnswered ? 'disabled' : ''}" 
+                        <div class="${optionClasses.join(' ')}" 
                              ${onclickHandler}
                              data-option="${escapedOption}"
                              style="pointer-events: ${isAnswered ? 'none' : 'auto'}">
                             ${option}
+                            ${isAnswered && option === normalizedOutput ? 
+                                '<span class="correct-indicator">✓</span>' : ''}
+                            ${isAnswered && option === selectedAnswer && !isCorrect ? 
+                                '<span class="incorrect-indicator">✗</span>' : ''}
                         </div>
                     `;
                 }).join('');
@@ -1456,18 +1482,19 @@
                     <div id="explanation-${index}" class="explanation" style="display: ${isAnswered ? 'block' : 'none'}">
                         <p><strong>Output:</strong> ${normalizedOutput}</p>
                         <p><strong>Explanation:</strong> ${formatTextContent(q.explanation || '')}</p>
+                        ${isAnswered ? `
+                            <p class="answer-status">
+                                <strong>Your Answer:</strong> 
+                                <span class="${isCorrect ? 'correct-text' : 'incorrect-text'}">
+                                    ${selectedAnswer} 
+                                    ${isCorrect ? '✓' : '✗'}
+                                </span>
+                            </p>
+                        ` : ''}
                     </div>
                 `;
 
-                // Update navigation buttons
-                document.getElementById("prevBtn").disabled = index === 0;
-                document.getElementById("nextBtn").disabled = index === questions.length - 1;
-                document.getElementById("finishBtn").disabled = false;
-
-                // Update unanswered sidebar to highlight current question
-                updateUnansweredSidebar();
-                
-                // Add some CSS to ensure proper code formatting and option styling
+                // Add styles for answer indicators
                 const style = document.createElement('style');
                 style.textContent = `
                     pre code {
@@ -1489,8 +1516,9 @@
                         cursor: pointer !important;
                         user-select: none;
                         transition: all 0.3s ease;
+                        position: relative;
                     }
-                    .option:hover {
+                    .option:hover:not(.disabled) {
                         transform: translateY(-2px);
                         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
                     }
@@ -1500,8 +1528,62 @@
                         transform: none !important;
                         box-shadow: none !important;
                     }
+                    .option.correct {
+                        background: var(--correct-gradient) !important;
+                        border-color: #27ae60 !important;
+                        color: white !important;
+                    }
+                    .option.incorrect {
+                        background: var(--incorrect-gradient) !important;
+                        border-color: #c0392b !important;
+                        color: white !important;
+                    }
+                    .correct-indicator, .incorrect-indicator {
+                        position: absolute;
+                        right: 10px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        font-size: 20px;
+                        font-weight: bold;
+                    }
+                    .correct-indicator {
+                        color: #27ae60;
+                    }
+                    .incorrect-indicator {
+                        color: #c0392b;
+                    }
+                    .answer-status {
+                        margin-top: 15px;
+                        padding: 10px;
+                        border-radius: 8px;
+                        background: var(--option-bg);
+                    }
+                    .correct-text {
+                        color: #27ae60;
+                        font-weight: bold;
+                    }
+                    .incorrect-text {
+                        color: #c0392b;
+                        font-weight: bold;
+                    }
                 `;
                 document.head.appendChild(style);
+
+                // Update navigation buttons and shuffle button
+                document.getElementById("prevBtn").disabled = index === 0;
+                document.getElementById("nextBtn").disabled = index === questions.length - 1;
+                document.getElementById("finishBtn").disabled = false;
+
+                // Update shuffle button state
+                const shuffleBtn = document.getElementById('shuffleBtn');
+                if (shuffleBtn) {
+                    shuffleBtn.disabled = isAnswered;
+                    shuffleBtn.style.opacity = isAnswered ? '0.5' : '1';
+                    shuffleBtn.style.cursor = isAnswered ? 'not-allowed' : 'pointer';
+                }
+
+                // Update unanswered sidebar
+                updateUnansweredSidebar();
             } catch (error) {
                 console.error('Error rendering question:', error);
                 document.getElementById("question-box").innerHTML = `
@@ -1573,6 +1655,12 @@
 
         // New function to handle option clicks
         function handleOptionClick(questionIndex, selectedOption) {
+            // Check if question is already answered
+            if (answeredQuestions.has(questionIndex)) {
+                console.log('Question already answered, ignoring click');
+                return;
+            }
+
             console.log('Option clicked:', {
                 questionIndex,
                 selectedOption,
@@ -1582,11 +1670,16 @@
         }
 
         function checkAnswer(questionIndex, selectedAnswer) {
+            // Prevent answering if already answered
+            if (answeredQuestions.has(questionIndex)) {
+                console.log('Question already answered, ignoring answer attempt');
+                return;
+            }
+
             console.log('Checking answer:', {
                 questionIndex,
                 selectedAnswer,
-                question: questions[questionIndex],
-                isQuestion15: questionIndex === 14 // 0-based index for Question 15
+                question: questions[questionIndex]
             });
             
             const question = questions[questionIndex];
@@ -1601,80 +1694,34 @@
             // Show the explanation immediately
             explanation.style.display = 'block';
 
-            // Remove any existing classes
-            options.forEach(option => {
-                option.classList.remove('correct', 'incorrect');
-            });
-
             // Normalize the output and selected answer for comparison
             const normalizedOutput = question.output.replace(/\\n/g, '\n').trim();
             const normalizedSelected = selectedAnswer.replace(/\\n/g, '\n').trim();
 
-            // Special logging for Question 15
-            if (questionIndex === 14) {
-                console.log('Question 15 comparison details:', {
-                    rawOutput: question.output,
-                    normalizedOutput,
-                    rawSelected: selectedAnswer,
-                    normalizedSelected,
-                    allOptions: Array.from(options).map(o => ({
-                        text: o.textContent.trim(),
-                        raw: o.textContent,
-                        dataOption: o.getAttribute('data-option')
-                    }))
-                });
-            }
+            // Store the selected answer and its correctness
+            localStorage.setItem(`selected_answer_${questionIndex}`, selectedAnswer);
 
-            console.log('Comparing answers:', {
-                normalizedOutput,
-                normalizedSelected,
-                options: Array.from(options).map(o => ({
-                    text: o.textContent.trim(),
-                    matchesOutput: o.textContent.trim() === normalizedOutput,
-                    matchesSelected: o.textContent.trim() === normalizedSelected
-                }))
-            });
+            // Check if the answer is correct
+            const isCorrect = normalizedSelected === normalizedOutput;
+            localStorage.setItem(`is_correct_${questionIndex}`, isCorrect.toString());
 
-            // Highlight the correct answer and check if selected answer is correct
-            let isCorrect = false;
-            options.forEach(option => {
-                const optionText = option.textContent.trim();
-                
-                if (optionText === normalizedOutput) {
-                    console.log('Found correct answer:', optionText);
-                    option.classList.add('correct');
-                }
-                if (optionText === normalizedSelected) {
-                    console.log('Found selected answer:', optionText);
-                    if (normalizedSelected === normalizedOutput) {
-                        console.log('Answer is correct!');
-                        isCorrect = true;
-                    } else {
-                        console.log('Answer is incorrect');
-                        option.classList.add('incorrect');
-                    }
-                }
-            });
-
-            // Update score if answer is correct and question hasn't been answered before
-            if (isCorrect && !answeredQuestions.has(questionIndex)) {
-                console.log('Updating score for correct answer');
+            // Update score if answer is correct
+            if (isCorrect) {
+                console.log('Answer is correct!');
                 updateScore();
-                answeredQuestions.add(questionIndex);
+            } else {
+                console.log('Answer is incorrect');
             }
 
-            // Remove from unanswered questions
+            // Mark the question as answered
+            answeredQuestions.add(questionIndex);
             unansweredQuestions.delete(questionIndex);
             
-            // Update the sidebar to reflect the answered status
+            // Update the sidebar
             updateUnansweredSidebar();
 
-            // Disable all options after selection
-            options.forEach(option => {
-                option.classList.add('disabled');
-                option.style.pointerEvents = 'none';
-                option.onclick = null; // Remove click handler
-            });
+            // Re-render the question to show the final state
+            renderQuestion(questionIndex);
         }
 
         let celebrationInterval = null;
@@ -1817,6 +1864,12 @@
             // Clean up celebration
             cleanupCelebration();
 
+            // Clear stored answers
+            for (let i = 0; i < questions.length; i++) {
+                localStorage.removeItem(`selected_answer_${i}`);
+                localStorage.removeItem(`is_correct_${i}`);
+            }
+
             // Reset score and questions
             currentScore = 0;
             answeredQuestions.clear();
@@ -1905,6 +1958,9 @@
                 return;
             }
 
+            // Check if current question is already answered
+            const isCurrentQuestionAnswered = answeredQuestions.has(currentIndex);
+
             switch (e.key) {
                 case 'ArrowLeft':
                     if (!document.getElementById('prevBtn').disabled) {
@@ -1920,10 +1976,13 @@
                 case '2':
                 case '3':
                 case '4':
-                    const optionIndex = parseInt(e.key) - 1;
-                    const options = document.querySelectorAll('.option');
-                    if (options[optionIndex] && !options[optionIndex].style.pointerEvents) {
-                        options[optionIndex].click();
+                    // Only allow option selection if question is not answered
+                    if (!isCurrentQuestionAnswered) {
+                        const optionIndex = parseInt(e.key) - 1;
+                        const options = document.querySelectorAll('.option');
+                        if (options[optionIndex] && !options[optionIndex].classList.contains('disabled')) {
+                            options[optionIndex].click();
+                        }
                     }
                     break;
                 case 'f':
@@ -2347,6 +2406,21 @@ End of Report
                 toggleShortcuts();
             }
         });
+
+        // Update the shuffle button to be disabled for answered questions
+        document.querySelector('.nav-buttons').insertAdjacentHTML('beforeend', `
+            <button id="shuffleBtn" onclick="shuffleCurrentQuestion()" style="background-color: #28a745;">
+                Shuffle Options
+            </button>
+        `);
+
+        // Add function to handle shuffling
+        function shuffleCurrentQuestion() {
+            // Only allow shuffling if question is not answered
+            if (!answeredQuestions.has(currentIndex)) {
+                renderQuestion(currentIndex);
+            }
+        }
     </script>
 
 </body>
