@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Zoho Interview Questions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: linear-gradient(45deg, #1a1a1a, #2d3436, #2c3e50, #1e272e);
+            background-size: 300% 300%;
+            animation: gradientBG 15s ease infinite;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: rgba(30, 30, 30, 0.95);
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        pre {
+            background: #2d3436;
+            padding: 15px;
+            overflow-x: auto;
+            border-radius: 8px;
+            font-size: 32px;
+            line-height: 1.5;
+            margin: 20px 0;
+            border: 1px solid #404040;
+            color: #e0e0e0;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 20px;
+        }
+
+        .nav-buttons button {
+            flex: 1;
+            max-width: 300px;
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 20px 35px;
+            font-weight: bold;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-buttons button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(46, 204, 113, 0.4);
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+        }
+
+        .nav-buttons button:active {
+            transform: translateY(-2px) scale(0.98);
+        }
+
+        .nav-buttons button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.2),
+                    transparent);
+            transition: 0.5s;
+        }
+
+        .nav-buttons button:hover::before {
+            left: 100%;
+        }
+
+        .nav-buttons button:disabled {
+            background: linear-gradient(45deg, #2c3e50, #34495e);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            opacity: 0.7;
+        }
+
+        .nav-buttons button:disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 16px;
+            min-width: 120px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:disabled {
+            background: linear-gradient(45deg, #2c3e50, #34495e);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        h2 {
+            color: #3498db;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .options {
+            margin: 20px 0;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 100%;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            border: 2px solid #404040;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            background: #2d3436;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            font-size: 35px;
+            font-weight: 500;
+            min-height: 80px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .option:hover {
+            background: linear-gradient(45deg, #2d3436, #353b48);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            border-color: #3498db;
+        }
+
+        .option:active {
+            transform: translateY(1px);
+        }
+
+        .option.correct {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            border-color: #27ae60;
+            color: white;
+            animation: correctPulse 0.5s ease;
+        }
+
+        .option.incorrect {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            border-color: #c0392b;
+            color: white;
+            animation: incorrectShake 0.5s ease;
+        }
+
+        @keyframes correctPulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes incorrectShake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        .option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .option:hover::before {
+            transform: translateX(100%);
+        }
+
+        .show-answer {
+            background-color: #28a745;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto;
+            display: block;
+            font-size: 18px;
+            padding: 15px 30px;
+        }
+
+        .show-answer:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .show-answer:active {
+            transform: translateY(1px);
+        }
+
+        .explanation {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(45deg, #2c3e50, #34495e);
+            border-radius: 12px;
+            animation: fadeIn 0.5s ease;
+            border-left: 4px solid #3498db;
+            font-size: 16px;
+            line-height: 1.6;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            color: #fff;
+        }
+
+        .explanation strong {
+            font-size: 18px;
+            color: #3498db;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .options {
+                grid-template-columns: 1fr;
+            }
+
+            body {
+                margin: 20px;
+            }
+        }
+
+        .team-scoreboard {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(45, 52, 54, 0.8);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .team {
+            text-align: center;
+            padding: 15px 30px;
+            background: rgba(30, 30, 30, 0.8);
+            border-radius: 10px;
+            min-width: 200px;
+        }
+
+        .team h3 {
+            color: #3498db;
+            margin: 0 0 10px 0;
+            font-size: 24px;
+        }
+
+        .team .score {
+            font-size: 36px;
+            font-weight: bold;
+            color: #2ecc71;
+            margin: 10px 0;
+        }
+
+        .score-btn {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .score-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .score-btn:active {
+            transform: translateY(1px);
+        }
+
+        .boys {
+            border: 2px solid #3498db;
+        }
+
+        .girls {
+            border: 2px solid #e84393;
+        }
+
+        .firecracker {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: explode 1s ease-out forwards;
+            z-index: 999;
+            pointer-events: none;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: translate(var(--x), var(--y)) scale(0);
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(var(--x), var(--y)) scale(20);
+                opacity: 0;
+            }
+        }
+
+        .spark {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            animation: spark 1s ease-out forwards;
+            z-index: 999;
+            pointer-events: none;
+        }
+
+        @keyframes spark {
+            0% {
+                transform: translate(var(--x), var(--y)) rotate(var(--angle)) translateX(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(var(--x), var(--y)) rotate(var(--angle)) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        .winner-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.5s ease;
+            overflow: hidden;
+        }
+
+        .winner-content {
+            background: linear-gradient(45deg, #1a1a1a, #2d3436);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 80%;
+            border: 2px solid #3498db;
+            box-shadow: 0 0 50px rgba(52, 152, 219, 0.3);
+            animation: winnerPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            z-index: 1001;
+            pointer-events: auto;
+        }
+
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1002;
+            overflow: hidden;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            animation: confetti-fall 3s linear infinite;
+            pointer-events: none;
+            z-index: 1002;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translate(var(--x), -10vh) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(var(--x), 110vh) rotate(360deg);
+                opacity: 0.7;
+            }
+        }
+
+        .winner-content h2 {
+            font-size: 48px;
+            color: #2ecc71;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+        }
+
+        .winner-content p {
+            font-size: 32px;
+            color: #fff;
+            margin: 20px 0;
+        }
+
+        .winner-content .score {
+            font-size: 72px;
+            color: #f1c40f;
+            margin: 30px 0;
+            text-shadow: 0 0 15px rgba(241, 196, 15, 0.5);
+        }
+
+        .winner-content button {
+            font-size: 24px;
+            padding: 15px 40px;
+            margin-top: 20px;
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .winner-content button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(46, 204, 113, 0.4);
+        }
+
+        .finish-btn {
+            background: linear-gradient(45deg, #e74c3c, #c0392b) !important;
+            font-size: 24px !important;
+            padding: 20px 35px !important;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(231, 76, 60, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(231, 76, 60, 0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <audio id="winnerAudio" src="audio/fireCrackers.mp3" preload="auto"></audio>
+    <div class="winner-popup" id="winnerPopup">
+        <div class="winner-content">
+            <h2>🎉 Congratulations! 🎉</h2>
+            <p>The Winner is:</p>
+            <div class="score" id="winnerTeam"></div>
+            <p>Final Scores:</p>
+            <p>Boys Team: <span id="finalBoysScore">0</span></p>
+            <p>Girls Team: <span id="finalGirlsScore">0</span></p>
+            <button onclick="resetContest()">Start New Contest</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="team-scoreboard">
+            <div class="team boys">
+                <h3>Boys Team</h3>
+                <div class="score">0</div>
+                <button onclick="updateScore('boys')" class="score-btn">+1 Point</button>
+            </div>
+            <div class="team girls">
+                <h3>Girls Team</h3>
+                <div class="score">0</div>
+                <button onclick="updateScore('girls')" class="score-btn">+1 Point</button>
+            </div>
+        </div>
+        <div id="question-box">
+            <!-- Question content will be injected here -->
+        </div>
+        <div class="nav-buttons">
+            <button id="prevBtn" onclick="changeQuestion(-1)">Previous</button>
+            <button id="finishBtn" onclick="finishContest()" class="finish-btn">Finish Contest</button>
+            <button id="nextBtn" onclick="changeQuestion(1)">Next</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                title: "1. Arrays",
+                code: `void main()
+{
+    int s[] = {1.0, 5, 0, 10, 0};
+    int f[] = {2, 4, 6, 8, 10, 12};
+    int n = 6, i = 0, j = 0;
+    for(j = 1; j < n; j++) {
+        if(s[j] > f[i])
+            printf("%d", i);
+        i = j;
+    }
+}`,
+                output: "02",
+                explanation: "The loop checks values from s[] against f[], printing i if condition is met.",
+                options: ["02", "12", "00", "None of these"]
+            },
+            {
+                title: "2. Functions",
+                code: `void f(int a[], int m) {
+    int j = 0;
+    for(j = 0; j < m; j++)
+        *(a + j) = *(a + j) - 5;
+}
+void main() {
+    int a[] = {'f', 'g', 'h', 'i', 'j'};
+    int j = 0;
+    f(a, 5);
+    for(j = 0; j < 5; j++)
+        printf("%c\\t", a[j]);
+}`,
+                output: "a b c d e",
+                explanation: "Each character is reduced by 5 in ASCII.",
+                options: ["a b c d e", "f g h i j", "A B C D E", "Error"]
+            },
+            {
+                title: "3. Branching and Looping",
+                code: `void main() {
+    int i = 0, j = 0, sum = 0;
+    for(i = 1; i < 500; i += 3)
+        for(j = 0; j < i; j++)
+            sum++;
+    printf("%d", sum);
+}`,
+                output: "364",
+                explanation: "Nested loops increment sum based on i.",
+                options: ["364", "500", "167", "Error"]
+            },
+            {
+                title: "4. Branching and Looping",
+                code: `void main() {
+    int n;
+    for(n = 6; n != 1; n--)
+        printf("%d", n--);
+}`,
+                output: "infinite loop",
+                explanation: "n-- inside loop alters the condition unexpectedly.",
+                options: ["654", "infinite loop", "6", "error"]
+            },
+            {
+                title: "5. Arrays",
+                code: `void main() {
+    int a[3][4] = {
+        {2,4,6,5},
+        {10,12,12,10},
+        {5,6,4,2}
+    };
+    int i = 0, j, k = 99;
+    while(i < 3) {
+        for(j = 0; j < 4; j++)
+            if(a[i][j] < k)
+                k = a[i][j];
+        i++;
+    }
+    printf("%d", k);
+}`,
+                output: "2",
+                explanation: "Searches the smallest value in the 2D array.",
+                options: ["2", "4", "5", "6"]
+            },
+            {
+                title: "6. Pointers",
+                code: `void main() {
+    char *x = "Alice";
+    int i, n = strlen(x);
+    *x = x[n];
+    for(i = 0; i < n; i++)
+        printf("%s", x);
+    x++;
+    printf("\\n", x);
+}`,
+                output: "runtime error",
+                explanation: "String literal modification causes segmentation fault.",
+                options: ["Alice", "runtime error", "Segmentation Fault", "No Output"]
+            },
+            {
+                title: "7. Structures and Union",
+                code: `struct value {
+    int bit1:1;
+    int bit3:4;
+    int bit4:4;
+} bit;
+int main() {
+    printf("%d\\n", sizeof(bit));
+    return 0;
+}`,
+                output: "4",
+                explanation: "Bitfields packed and padded to nearest alignment.",
+                options: ["1", "4", "9", "3"]
+            },
+            {
+                title: "8. Dynamic Memory",
+                code: `struct node {
+    int data;
+    float d;
+    struct node *link;
+};
+int main() {
+    struct node *p, *q;
+    p = (struct node *) malloc(sizeof(struct node));
+    q = (struct node *) malloc(sizeof(struct node));
+    printf("%d,%d\\n", sizeof(p), sizeof(q));
+    return 0;
+}`,
+                output: "4,4",
+                explanation: "Size of pointer not structure (on 32-bit systems).",
+                options: ["4,4", "8,8", "4,8", "Error"]
+            },
+            {
+                title: "9. Structures and Unions",
+                code: `typedef union {
+    int a;
+    char b[10];
+    float c;
+} Union;
+int main() {
+    Union x, y = {100};
+    x.a = 50;
+    strcpy(x.b, "Hello");
+    x.c = 21.50;
+    printf("%d %s %f\\n", x.a, x.b, x.c);
+    printf("%d %s %f", y.a, y.b, y.c);
+}`,
+                output: "1101791232 21.500000\n100 d 0.000000",
+                explanation: "Union members overlap in memory, causing overwrite.",
+                options: ["Mixed output", "Compile Error", "1101791232 21.5", "100 d 0.0"]
+            },
+            {
+                title: "10. Structures and Unions",
+                code: `struct point {
+    int x;
+    int y;
+} origin, *pp;
+int main() {
+    pp = &origin;
+    printf("origin is (%d %d)\\n", (*pp).x, (*pp).y);
+    printf("origin is (%d %d)", pp->x, pp->y);
+    return 0;
+}`,
+                output: "origin is (0 0)\norigin is (0 0)",
+                explanation: "Uninitialized struct members are zero by default in many compilers.",
+                options: ["(0 0)", "(1 1)", "Compilation Error", "Runtime Error"]
+            },
+
+
+
+
+        ];
+
+        questions.push(
+            {
+                title: "11. Algorithm",
+                code: `int main() {
+    printf("%d %d %d %d\\n", 72, 072, 0x72, 0X72);
+    return 0;
+}`,
+                output: "72 58 114 114",
+                explanation: "`072` is octal (base 8), `0x72` is hexadecimal (base 16).",
+                options: ["72 58 114 114", "72 72 72 72", "Error", "None"]
+            },
+            {
+                title: "12. Operator and Expression",
+                code: `void main() {
+    char ch;
+    int a;
+    float b;
+    printf("bytes occupied by ch-%d\\n", sizeof(ch));
+    printf("bytes occupied by a-%d\\n", sizeof(a));
+    printf("bytes occupied by b-%d\\n", sizeof(b));
+}`,
+                output: "Bytes occupied by ch-1\nBytes occupied by a-4\nBytes occupied by b-4",
+                explanation: "Standard sizes on 32-bit systems: char=1, int=4, float=4.",
+                options: ["1 4 4", "1 2 4", "4 4 4", "Error"]
+            },
+            {
+                title: "13. Operator and Expressions",
+                code: `void main() {
+    printf("%d\\n", sizeof('7'));
+    printf("%d\\n", sizeof(7));
+    printf("%d\\n", sizeof(7.0));
+}`,
+                output: "4\n4\n8",
+                explanation: "'7' is an int literal, 7 is int, 7.0 is double.",
+                options: ["4 4 8", "1 4 8", "4 2 8", "Error"]
+            },
+            {
+                title: "14. Datatypes",
+                code: `void main() {
+    char ch = 291;
+    printf("%d %d %c\\n", 2147483648, ch, ch);
+}`,
+                output: "-2147483648 35 #",
+                explanation: "Integer overflow and implicit char casting.",
+                options: ["-2147483648 35 #", "2147483648 291 ?", "Error", "None"]
+            },
+            {
+                title: "15. Datatypes",
+                code: `void main() {
+    int g;
+    g = 300000 * 300000 / 300000;
+    printf("g-%d\\n", g);
+}`,
+                output: "-647",
+                explanation: "Overflow in multiplication results in incorrect value.",
+                options: ["-647", "300000", "0", "Error"]
+            },
+            {
+                title: "16. Operator and Expression",
+                code: `void main() {
+    int x = 10, y = 5, p, q;
+    p = x > 9;
+    q = x > 3 && y != -3;
+    printf("p-%d q-%d\\n", p, q);
+}`,
+                output: "p-1 q-1",
+                explanation: "Both logical conditions are true.",
+                options: ["p-1 q-1", "p-0 q-1", "p-1 q-0", "p-0 q-0"]
+            },
+            {
+                title: "17. String Indexing",
+                code: `#include <stdio.h>
+int main() {
+    char str[] = "Aptitude";
+    printf("%s %s %s\\n", &str[5], &5[str], str+5);
+    printf("%c %c %c\\n", *(str+6), str[6], 6[str]);
+    return 0;
+}`,
+                output: "ude ude ude\nu u u",
+                explanation: "All expressions access the same character location.",
+                options: ["ude ude ude\\nu u u", "tude tude tude\\nt t t", "Error", "None"]
+            },
+            {
+                title: "18. Array Function",
+                code: `#include <stdio.h>
+#define SIZE(arr) sizeof(arr)/sizeof(*arr)
+void fun(int* arr, int n) {
+    *arr += *(arr + n - 1) += 10;
+}
+void printArr(int* arr, int n) {
+    for(int i = 0; i < n; ++i)
+        printf("%d ", arr[i]);
+}
+int main() {
+    int arr[] = {10, 20, 30};
+    int size = SIZE(arr);
+    fun(arr, size);
+    printArr(arr, size);
+    return 0;
+}`,
+                output: "50 20 40",
+                explanation: "Modifies both the first and last elements of array.",
+                options: ["50 20 40", "10 20 30", "40 20 40", "Error"]
+            },
+            {
+                title: "19. Invalid Struct",
+                code: `#include <stdio.h>
+struct st {
+    int x;
+    struct st next;
+};
+int main() {
+    struct st temp;
+    temp.x = 10;
+    temp.next = temp;
+    printf("%d", temp.next.x);
+    return 0;
+}`,
+                output: "Compilation Error",
+                explanation: "Self-referencing structure causes error (incomplete type).",
+                options: ["10", "Compilation Error", "0", "Segmentation Fault"]
+            },
+            {
+                title: "20. Union Size",
+                code: `union test {
+    int x;
+    char arr[8];
+    int y;
+};
+int main() {
+    printf("%d", sizeof(union test));
+    return 0;
+}`,
+                output: "8",
+                explanation: "Size of largest member in union is 8 (arr[8]).",
+                options: ["4", "8", "12", "Error"]
+            }
+        );
+
+        questions.push(
+            {
+                title: "21. Pointer to Pointer Array",
+                code: `#include <stdio.h>
+char *c[] = {"GeksQuiz", "MCQ", "TEST", "QUIZ"};
+char **cp[] = {c+3, c+2, c+1, c};
+char ***cpp = cp;
+int main() {
+    printf("%s ", **++cpp);
+    printf("%s ", *--*++cpp+3);
+    printf("%s ", *cpp[-2]+3);
+    printf("%s ", cpp[-1][-1]+1);
+    return 0;
+}`,
+                output: "TEST sQuiz Z CQ",
+                explanation: "Pointer arithmetic and indexing on char**.",
+                options: ["TEST sQuiz Z CQ", "QUIZ TEST MCQ GeksQuiz", "TEST QUIZ MCQ MC", "Error"]
+            },
+            {
+                title: "22. Loops",
+                code: `#include <stdio.h>
+void main() {
+    int n = 21;
+    int out = 1;
+    while(n > 3) {
+        n /= 2;
+        out *= (n / 2);
+    }
+    printf("%d", n * out);
+}`,
+                output: "20",
+                explanation: "Simple loop with integer division and product.",
+                options: ["20", "18", "12", "10"]
+            },
+            {
+                title: "23. Array and Pointer",
+                code: `#include <stdio.h>
+int main() {
+    int n[] = {8,1,3,9,4};
+    int j, *y = n;
+    for(j = 0; j < 5; j++) {
+        if(j % 2 == 0)
+            *y++;
+    }
+    printf("%d", *y);
+    return 0;
+}`,
+                output: "9",
+                explanation: "Pointer y increments on even j; ends up at n[3] = 9.",
+                options: ["9", "3", "4", "8"]
+            },
+            {
+                title: "24. XOR Comparison",
+                code: `#include <stdio.h>
+int main() {
+    int x = 10;
+    int y = 20;
+    if(!(x ^ y))
+        printf("0");
+    else
+        printf("1");
+    return 0;
+}`,
+                output: "1",
+                explanation: "XOR of unequal numbers ≠ 0, so result is 1.",
+                options: ["0", "1", "10", "20"]
+            },
+            {
+                title: "25. 2D Array Pointer Operation",
+                code: `#include <stdio.h>
+int main() {
+    int a[10][10] = {{1,2},{3,4},{5,6},{7,8},{9,10}};
+    int *p = a[3];
+    int result = (*p + 2) * a[4][1] + (++*p) + (*p + 13);
+    printf("%d", result);
+    return 0;
+}`,
+                output: "119",
+                explanation: "Complex pointer arithmetic on 2D array.",
+                options: ["119", "134", "108", "Error"]
+            },
+            {
+                title: "26. Pointers to Pointers",
+                code: `#include <stdio.h>
+int calc(int x, int *py, int **ppz) {
+    int y, z;
+    **ppz += 1;
+    z = **ppz;
+    *py += **ppz;
+    y = *py;
+    x += *py;
+    return x + y + z;
+}
+void main() {
+    int c, *b, **a;
+    c = 5;
+    b = &c;
+    a = &b;
+    printf("%d", calc(c, b, a));
+}`,
+                output: "35",
+                explanation: "Function manipulates variables via pointers and double pointers.",
+                options: ["35", "40", "25", "30"]
+            },
+            {
+                title: "27. Macro Evaluation",
+                code: `#define SQR(x) (x*x)
+int main() {
+    int a, b = 3;
+    a = SQR(b+2);
+    printf("%d", a);
+}`,
+                output: "11",
+                explanation: "Macro expands to (b+2*b+2) => 3+6+2 = 11",
+                options: ["11", "25", "10", "9"]
+            },
+            {
+                title: "28. Loop and Print",
+                code: `int main() {
+    int i;
+    int arr[5] = {1};
+    for(i = 0; i < 5; i++)
+        printf("%d", i);
+}`,
+                output: "01234",
+                explanation: "Simple loop prints indices 0 to 4.",
+                options: ["01234", "12345", "00000", "Error"]
+            },
+            {
+                title: "29. Assignment in If",
+                code: `int main() {
+    int x = 0;
+    if(x = 0)
+        printf("value of x is zero");
+    else
+        printf("value of x is not zero");
+}`,
+                output: "value of x is not zero",
+                explanation: "Assignment used instead of comparison; evaluates to false.",
+                options: ["value of x is zero", "value of x is not zero", "Error", "No Output"]
+            },
+            {
+                title: "30. Switch Fallthrough",
+                code: `int main() {
+    int i = 0;
+    for(i = 0; i < 20; i++) {
+        switch(i) {
+            case 0: i += 5;
+            case 1: i += 2;
+            case 5: i += 5;
+            default: i += 4;
+                     break;
+        }
+        printf("%d", i);
+    }
+}`,
+                output: "1621",
+                explanation: "Switch statements fall through without breaks.",
+                options: ["1621", "065", "1519", "Error"]
+            }
+        );
+
+
+
+        let currentIndex = 0;
+
+        // Add shuffle function
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function renderQuestion(index) {
+            const q = questions[index];
+            // Create a copy of options and shuffle them
+            const shuffledOptions = shuffleArray([...q.options]);
+
+            document.getElementById("question-box").innerHTML = `
+        <h2>${q.title}</h2>
+        <pre><code>${q.code}</code></pre>
+        <div class="options">
+          ${shuffledOptions.map((option, i) => `
+            <div class="option" onclick="checkAnswer(${index}, '${option}')">
+              ${option}
+            </div>
+          `).join('')}
+        </div>
+        <div id="explanation-${index}" class="explanation" style="display: none;">
+          <p><strong>Output:</strong> ${q.output}</p>
+          <p><strong>Explanation:</strong> ${q.explanation}</p>
+        </div>
+      `;
+
+            document.getElementById("prevBtn").disabled = index === 0;
+            document.getElementById("nextBtn").disabled = index === questions.length - 1;
+            document.getElementById("finishBtn").disabled = false;
+        }
+
+        let teamScores = {
+            boys: 0,
+            girls: 0
+        };
+
+        function updateScore(team) {
+            teamScores[team]++;
+            document.querySelector(`.team.${team} .score`).textContent = teamScores[team];
+        }
+
+        function checkAnswer(questionIndex, selectedAnswer) {
+            const question = questions[questionIndex];
+            const options = document.querySelectorAll(`#question-box .option`);
+            const explanation = document.getElementById(`explanation-${questionIndex}`);
+
+            // Show the explanation immediately
+            explanation.style.display = 'block';
+
+            // Remove any existing classes
+            options.forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+            });
+
+            // Highlight the correct answer
+            options.forEach(option => {
+                if (option.textContent.trim() === question.output) {
+                    option.classList.add('correct');
+                }
+                // If this is the selected answer and it's wrong, mark it as incorrect
+                if (option.textContent.trim() === selectedAnswer && selectedAnswer !== question.output) {
+                    option.classList.add('incorrect');
+                }
+            });
+
+            // Disable all options after selection
+            options.forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+
+            // Don't automatically update score - let the teacher decide which team gets the point
+        }
+
+        let celebrationInterval = null;
+        let audioInterval = null;
+
+        function cleanupCelebration() {
+            // Clear all intervals
+            if (celebrationInterval) {
+                clearInterval(celebrationInterval);
+                celebrationInterval = null;
+            }
+            if (audioInterval) {
+                clearInterval(audioInterval);
+                audioInterval = null;
+            }
+
+            // Remove all effects
+            document.querySelectorAll('.confetti-container, .firecracker, .spark').forEach(e => e.remove());
+
+            // Stop and reset audio
+            const audio = document.getElementById('winnerAudio');
+            audio.pause();
+            audio.currentTime = 0;
+        }
+
+        function createConfetti() {
+            // Remove existing confetti container if any
+            const existingContainer = document.querySelector('.confetti-container');
+            if (existingContainer) {
+                existingContainer.remove();
+            }
+
+            // Create new container
+            const container = document.createElement('div');
+            container.className = 'confetti-container';
+            document.body.appendChild(container);
+
+            const colors = ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff'];
+            const width = window.innerWidth;
+
+            // Create more confetti for better coverage
+            for (let i = 0; i < 200; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                // Distribute confetti across the entire width
+                const x = Math.random() * width;
+                confetti.style.setProperty('--x', `${x}px`);
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                container.appendChild(confetti);
+            }
+        }
+
+        function createFirecrackers() {
+            const colors = ['#ff0000', '#ffd700', '#ff69b4', '#00ff00', '#ff4500', '#ffa500'];
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            const spread = 200; // Reduced spread for more centered effect
+
+            // Create multiple firecrackers at different positions
+            for (let i = 0; i < 5; i++) {
+                const x = centerX + (Math.random() - 0.5) * spread;
+                const y = centerY + (Math.random() - 0.5) * spread;
+
+                // Create the main explosion
+                const firecracker = document.createElement('div');
+                firecracker.className = 'firecracker';
+                firecracker.style.setProperty('--x', `${x}px`);
+                firecracker.style.setProperty('--y', `${y}px`);
+                firecracker.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                document.body.appendChild(firecracker);
+
+                // Create sparks
+                for (let j = 0; j < 12; j++) {
+                    const spark = document.createElement('div');
+                    spark.className = 'spark';
+                    spark.style.setProperty('--x', `${x}px`);
+                    spark.style.setProperty('--y', `${y}px`);
+                    spark.style.setProperty('--angle', `${j * 30}deg`);
+                    spark.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    document.body.appendChild(spark);
+                }
+
+                // Remove elements after animation
+                setTimeout(() => {
+                    firecracker.remove();
+                    document.querySelectorAll('.spark').forEach(s => s.remove());
+                }, 1000);
+            }
+        }
+
+        function showWinnerPopup() {
+            // Clean up any existing celebration first
+            cleanupCelebration();
+
+            const popup = document.getElementById('winnerPopup');
+            const winnerTeam = teamScores.boys > teamScores.girls ? 'Boys Team' :
+                teamScores.girls > teamScores.boys ? 'Girls Team' : 'It\'s a Tie!';
+
+            document.getElementById('winnerTeam').textContent = winnerTeam;
+            document.getElementById('finalBoysScore').textContent = teamScores.boys;
+            document.getElementById('finalGirlsScore').textContent = teamScores.girls;
+
+            // Play audio and show popup
+            const audio = document.getElementById('winnerAudio');
+            audio.currentTime = 0;
+
+            // Start the celebration
+            popup.style.display = 'flex';
+
+            // Initial effects
+            createConfetti();
+            createFirecrackers();
+
+            // Set up celebration interval
+            let timeElapsed = 0;
+            celebrationInterval = setInterval(() => {
+                timeElapsed += 2;
+
+                if (timeElapsed <= 10) {
+                    createFirecrackers();
+                    if (timeElapsed % 3 === 0) {
+                        createConfetti();
+                    }
+                } else {
+                    cleanupCelebration();
+                }
+            }, 2000);
+
+            // Set up audio loop
+            const playAudio = () => {
+                audio.currentTime = 0;
+                audio.play().catch(e => console.log("Audio play failed:", e));
+            };
+
+            playAudio(); // Play first time
+            audioInterval = setInterval(playAudio, 3000); // Loop every 3 seconds
+
+            // Stop everything after 10 seconds
+            setTimeout(cleanupCelebration, 10000);
+        }
+
+        function resetContest() {
+            // Clean up celebration
+            cleanupCelebration();
+
+            // Reset scores
+            teamScores.boys = 0;
+            teamScores.girls = 0;
+            document.querySelector('.team.boys .score').textContent = '0';
+            document.querySelector('.team.girls .score').textContent = '0';
+
+            // Hide popup
+            const popup = document.getElementById('winnerPopup');
+            popup.style.display = 'none';
+
+            // Reset to first question
+            currentIndex = 0;
+            renderQuestion(currentIndex);
+        }
+
+        function finishContest() {
+            if (confirm("Are you sure you want to finish the contest and announce the winner?")) {
+                showWinnerPopup();
+            }
+        }
+
+        function changeQuestion(direction) {
+            currentIndex += direction;
+            if (currentIndex < 0) currentIndex = 0;
+            if (currentIndex >= questions.length) {
+                currentIndex = questions.length - 1;
+            }
+            renderQuestion(currentIndex);
+        }
+
+        // Add a refresh button to the HTML
+        document.querySelector('.nav-buttons').insertAdjacentHTML('beforeend', `
+          <button onclick="renderQuestion(currentIndex)" style="background-color: #28a745;">
+            Shuffle Options
+          </button>
+        `);
+
+        // Initial render
+        renderQuestion(currentIndex);
+
+        // Clean up on page unload
+        window.addEventListener('beforeunload', cleanupCelebration);
+    </script>
+
+</body>
+
+</html>

@@ -5,14 +5,53 @@
     <meta charset="UTF-8">
     <title>Zoho Interview Questions</title>
     <style>
+        :root {
+            --bg-gradient-1: #1a1a1a;
+            --bg-gradient-2: #2d3436;
+            --bg-gradient-3: #2c3e50;
+            --bg-gradient-4: #1e272e;
+            --text-color: #fff;
+            --container-bg: rgba(30, 30, 30, 0.95);
+            --option-bg: #2d3436;
+            --option-border: #404040;
+            --option-hover: #353b48;
+            --correct-gradient: linear-gradient(45deg, #2ecc71, #27ae60);
+            --incorrect-gradient: linear-gradient(45deg, #e74c3c, #c0392b);
+            --button-gradient: linear-gradient(45deg, #3498db, #2980b9);
+            --button-hover: linear-gradient(45deg, #2980b9, #3498db);
+            --sidebar-bg: rgba(30, 30, 30, 0.95);
+            --score-bg: rgba(46, 204, 113, 0.2);
+            --score-border: rgba(46, 204, 113, 0.3);
+        }
+
+        [data-theme="light"] {
+            --bg-gradient-1: #f5f6fa;
+            --bg-gradient-2: #dfe4ea;
+            --bg-gradient-3: #dff9fb;
+            --bg-gradient-4: #c7ecee;
+            --text-color: #2d3436;
+            --container-bg: rgba(255, 255, 255, 0.95);
+            --option-bg: #ffffff;
+            --option-border: #dcdde1;
+            --option-hover: #f1f2f6;
+            --correct-gradient: linear-gradient(45deg, #00b894, #00a884);
+            --incorrect-gradient: linear-gradient(45deg, #d63031, #c0392b);
+            --button-gradient: linear-gradient(45deg, #0984e3, #74b9ff);
+            --button-hover: linear-gradient(45deg, #74b9ff, #0984e3);
+            --sidebar-bg: rgba(255, 255, 255, 0.95);
+            --score-bg: rgba(0, 184, 148, 0.2);
+            --score-border: rgba(0, 184, 148, 0.3);
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 40px;
-            background: linear-gradient(45deg, #1a1a1a, #2d3436, #2c3e50, #1e272e);
+            background: linear-gradient(45deg, var(--bg-gradient-1), var(--bg-gradient-2), var(--bg-gradient-3), var(--bg-gradient-4));
             background-size: 300% 300%;
             animation: gradientBG 15s ease infinite;
-            color: #fff;
+            color: var(--text-color);
             min-height: 100vh;
+            transition: all 0.3s ease;
         }
 
         @keyframes gradientBG {
@@ -32,12 +71,102 @@
         .container {
             max-width: 1000px;
             margin: auto;
-            background: rgba(30, 30, 30, 0.95);
+            background: var(--container-bg);
             padding: 30px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             border-radius: 16px;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--option-border);
+            position: relative;
+            margin-right: 250px;
+            margin-left: 100px; /* Make space for score display */
+        }
+
+        .unanswered-sidebar {
+            position: fixed;
+            right: 20px;
+            top: 20px;
+            width: 220px;
+            background: var(--sidebar-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--option-border);
+            z-index: 100;
+        }
+
+        .unanswered-sidebar h3 {
+            color: #e74c3c;
+            margin: 0 0 15px 0;
+            font-size: 20px;
+            text-align: center;
+            border-bottom: 2px solid #e74c3c;
+            padding-bottom: 10px;
+        }
+
+        .unanswered-count {
+            font-size: 24px;
+            color: #e74c3c;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .unanswered-list {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .unanswered-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .unanswered-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .unanswered-list::-webkit-scrollbar-thumb {
+            background: #e74c3c;
+            border-radius: 4px;
+        }
+
+        .unanswered-item {
+            background: rgba(231, 76, 60, 0.1);
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(231, 76, 60, 0.2);
+        }
+
+        .unanswered-item:hover {
+            background: rgba(231, 76, 60, 0.2);
+            transform: translateX(-5px);
+        }
+
+        .unanswered-item.current {
+            background: rgba(231, 76, 60, 0.3);
+            border-color: #e74c3c;
+        }
+
+        @media (max-width: 1200px) {
+            .container {
+                margin-left: 20px;
+            }
+            .score-display {
+                position: static;
+                display: inline-block;
+                margin-bottom: 20px;
+            }
+            .unanswered-sidebar {
+                position: static;
+                width: auto;
+                margin: 20px 0;
+            }
         }
 
         pre {
@@ -310,111 +439,38 @@
             }
         }
 
-        .team-scoreboard {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: rgba(45, 52, 54, 0.8);
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .team {
+        .score-display {
+            position: fixed;
+            left: 20px;
+            top: 20px;
+            background: var(--score-bg);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--score-border);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            min-width: 80px;
             text-align: center;
-            padding: 15px 30px;
-            background: rgba(30, 30, 30, 0.8);
-            border-radius: 10px;
-            min-width: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
-        .team h3 {
-            color: #3498db;
-            margin: 0 0 10px 0;
+        .score-display h3 {
+            color: #2ecc71;
+            margin: 0 0 5px 0;
+            font-size: 14px;
+            font-weight: normal;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .score-display .score {
             font-size: 24px;
-        }
-
-        .team .score {
-            font-size: 36px;
             font-weight: bold;
             color: #2ecc71;
-            margin: 10px 0;
-        }
-
-        .score-btn {
-            background: linear-gradient(45deg, #e74c3c, #c0392b);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        .score-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
-        }
-
-        .score-btn:active {
-            transform: translateY(1px);
-        }
-
-        .boys {
-            border: 2px solid #3498db;
-        }
-
-        .girls {
-            border: 2px solid #e84393;
-        }
-
-        .firecracker {
-            position: fixed;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            animation: explode 1s ease-out forwards;
-            z-index: 999;
-            pointer-events: none;
-        }
-
-        @keyframes explode {
-            0% {
-                transform: translate(var(--x), var(--y)) scale(0);
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 1;
-            }
-
-            100% {
-                transform: translate(var(--x), var(--y)) scale(20);
-                opacity: 0;
-            }
-        }
-
-        .spark {
-            position: fixed;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            animation: spark 1s ease-out forwards;
-            z-index: 999;
-            pointer-events: none;
-        }
-
-        @keyframes spark {
-            0% {
-                transform: translate(var(--x), var(--y)) rotate(var(--angle)) translateX(0);
-                opacity: 1;
-            }
-
-            100% {
-                transform: translate(var(--x), var(--y)) rotate(var(--angle)) translateX(100px);
-                opacity: 0;
-            }
+            margin: 0;
+            text-shadow: 0 0 10px rgba(46, 204, 113, 0.3);
         }
 
         .winner-popup {
@@ -536,36 +592,590 @@
                 box-shadow: 0 0 0 0 rgba(231, 76, 60, 0);
             }
         }
+
+        .theme-toggle {
+            background: var(--container-bg);
+            color: var(--text-color);
+            border: 2px solid var(--option-border);
+            border-radius: 12px;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .theme-toggle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                rgba(255, 255, 255, 0.1),
+                rgba(255, 255, 255, 0.2),
+                rgba(255, 255, 255, 0.1));
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-3px) scale(1.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            border-color: var(--button-gradient);
+        }
+
+        .theme-toggle:hover::before {
+            transform: translateX(100%);
+        }
+
+        .theme-toggle:active {
+            transform: translateY(1px) scale(0.95);
+        }
+
+        .theme-toggle .icon {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .theme-toggle:hover .icon {
+            transform: rotate(360deg);
+        }
+
+        @keyframes themePulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(52, 152, 219, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(52, 152, 219, 0);
+            }
+        }
+
+        .theme-toggle[data-theme="light"] {
+            animation: themePulse 2s infinite;
+        }
+
+        @media (max-width: 768px) {
+            .score-display {
+                position: static;
+                display: inline-flex;
+                flex-direction: row;
+                align-items: center;
+                margin: 20px auto;
+                width: auto;
+            }
+            .theme-toggle {
+                margin-left: 15px;
+            }
+        }
+
+        .keyboard-shortcuts {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--container-bg);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            font-size: 14px;
+            z-index: 1000;
+            border: 1px solid var(--option-border);
+            transform: translateY(120%);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+
+        .keyboard-shortcuts.visible {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .keyboard-shortcuts h4 {
+            margin: 0 0 10px 0;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .keyboard-shortcuts h4::after {
+            content: '×';
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0 5px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .keyboard-shortcuts h4::after:hover {
+            background: var(--option-hover);
+        }
+
+        .shortcut-fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            background: var(--button-gradient);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .shortcut-fab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                rgba(255, 255, 255, 0.1),
+                rgba(255, 255, 255, 0.2),
+                rgba(255, 255, 255, 0.1));
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .shortcut-fab:hover {
+            transform: translateY(-3px) scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .shortcut-fab:hover::before {
+            transform: translateX(100%);
+        }
+
+        .shortcut-fab:active {
+            transform: translateY(1px) scale(0.95);
+        }
+
+        .shortcut-fab.active {
+            background: var(--incorrect-gradient);
+            transform: rotate(45deg);
+        }
+
+        .shortcut-fab.active:hover {
+            transform: rotate(45deg) translateY(-3px) scale(1.1);
+        }
+
+        @keyframes fabPulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(52, 152, 219, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(52, 152, 219, 0);
+            }
+        }
+
+        .shortcut-fab:not(.active) {
+            animation: fabPulse 2s infinite;
+        }
+
+        @media (max-width: 768px) {
+            .keyboard-shortcuts {
+                width: calc(100% - 40px);
+                max-width: 300px;
+                right: 20px;
+                bottom: 80px;
+            }
+        }
+
+        .save-load-panel {
+            position: fixed;
+            top: 20px;
+            left: 180px;
+            background: var(--container-bg);
+            padding: 12px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            border: 2px solid var(--option-border);
+            display: flex;
+            gap: 12px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .save-load-panel:hover {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            border-color: var(--button-gradient);
+        }
+
+        .save-load-panel button {
+            padding: 8px 16px;
+            font-size: 14px;
+            min-width: auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 8px;
+            border: 1px solid var(--option-border);
+            background: var(--option-bg);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .save-load-panel button:hover {
+            transform: translateY(-2px);
+            background: var(--option-hover);
+            border-color: var(--button-gradient);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .save-load-panel button:active {
+            transform: translateY(1px);
+        }
+
+        @media (max-width: 1200px) {
+            .theme-toggle {
+                left: 20px;
+                top: 80px;
+            }
+            .save-load-panel {
+                left: 80px;
+                top: 80px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .save-load-panel {
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                top: auto;
+                width: auto;
+                max-width: 90%;
+            }
+            .theme-toggle {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                top: auto;
+                left: auto;
+            }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--container-bg);
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 90%;
+            width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid var(--option-border);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--option-border);
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: var(--text-color);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            min-width: auto;
+        }
+
+        .export-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .export-options button {
+            flex: 1;
+            max-width: 200px;
+            padding: 12px 20px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .export-options button.pdf {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+        }
+
+        .export-options button.txt {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+        }
+
+        .export-options button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .export-options button:active {
+            transform: translateY(1px);
+        }
+
+        .export-preview {
+            margin-top: 20px;
+            padding: 15px;
+            background: var(--option-bg);
+            border-radius: 8px;
+            border: 1px solid var(--option-border);
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+
+        #saveSlots {
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 10px 0;
+        }
+
+        .save-slot .actions {
+            display: flex;
+            gap: 5px;
+            margin-top: 5px;
+        }
+
+        .save-slot .actions button {
+            padding: 4px 8px;
+            font-size: 12px;
+            min-width: auto;
+        }
+
+        .disclaimer-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .disclaimer-content {
+            background: var(--container-bg);
+            padding: 30px;
+            border-radius: 16px;
+            max-width: 90%;
+            width: 500px;
+            border: 2px solid var(--button-gradient);
+            box-shadow: 0 0 30px rgba(52, 152, 219, 0.3);
+            position: relative;
+        }
+
+        .disclaimer-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--option-border);
+        }
+
+        .disclaimer-header h3 {
+            margin: 0;
+            color: var(--text-color);
+            font-size: 24px;
+            flex: 1;
+        }
+
+        .disclaimer-icon {
+            font-size: 32px;
+            color: var(--text-color);
+        }
+
+        .disclaimer-body {
+            color: var(--text-color);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .disclaimer-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 15px 0;
+            padding: 12px;
+            background: var(--option-bg);
+            border-radius: 8px;
+            border: 1px solid var(--option-border);
+            transition: all 0.3s ease;
+        }
+
+        .disclaimer-feature:hover {
+            transform: translateX(5px);
+            border-color: var(--button-gradient);
+        }
+
+        .disclaimer-feature-icon {
+            font-size: 24px;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .disclaimer-feature-text {
+            flex: 1;
+        }
+
+        .disclaimer-feature-text h4 {
+            margin: 0 0 5px 0;
+            color: var(--text-color);
+        }
+
+        .disclaimer-feature-text p {
+            margin: 0;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .disclaimer-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .disclaimer-footer button {
+            padding: 10px 25px;
+            font-size: 16px;
+        }
+
+        .disclaimer-footer button.primary {
+            background: var(--button-gradient);
+        }
+
+        .disclaimer-footer button.secondary {
+            background: var(--option-bg);
+            border: 1px solid var(--option-border);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 </head>
 
 <body>
     <audio id="winnerAudio" src="audio/fireCrackers.mp3" preload="auto"></audio>
+    <div class="score-display">
+        <div>
+            <h3>Score</h3>
+            <div class="score">0</div>
+        </div>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+            <span class="icon">🌓</span>
+        </button>
+    </div>
+    <button class="shortcut-fab" onclick="toggleShortcuts()" title="Keyboard Shortcuts">⌨️</button>
+    <div class="keyboard-shortcuts">
+        <h4 onclick="toggleShortcuts()">Keyboard Shortcuts</h4>
+        <div class="shortcut-item">
+            <span>Previous Question</span>
+            <span class="key">←</span>
+        </div>
+        <div class="shortcut-item">
+            <span>Next Question</span>
+            <span class="key">→</span>
+        </div>
+        <div class="shortcut-item">
+            <span>Select Option 1-4</span>
+            <span class="key">1-4</span>
+        </div>
+        <div class="shortcut-item">
+            <span>Finish Contest</span>
+            <span class="key">F</span>
+        </div>
+        <div class="shortcut-item">
+            <span>Toggle Theme</span>
+            <span class="key">T</span>
+        </div>
+    </div>
+    <div class="unanswered-sidebar">
+        <h3>Questions Not Attempted</h3>
+        <div class="unanswered-count">0</div>
+        <div class="unanswered-list">
+            <!-- Unanswered questions will be listed here -->
+        </div>
+    </div>
     <div class="winner-popup" id="winnerPopup">
         <div class="winner-content">
-            <h2>🎉 Congratulations! 🎉</h2>
-            <p>The Winner is:</p>
-            <div class="score" id="winnerTeam"></div>
-            <p>Final Scores:</p>
-            <p>Boys Team: <span id="finalBoysScore">0</span></p>
-            <p>Girls Team: <span id="finalGirlsScore">0</span></p>
+            <h2>🎉 Contest Complete! 🎉</h2>
+            <p>Your Final Score:</p>
+            <div class="score" id="finalScore">0</div>
+            <p>Total Questions: <span id="totalQuestions">0</span></p>
             <button onclick="resetContest()">Start New Contest</button>
         </div>
     </div>
 
     <div class="container">
-        <div class="team-scoreboard">
-            <div class="team boys">
-                <h3>Boys Team</h3>
-                <div class="score">0</div>
-                <button onclick="updateScore('boys')" class="score-btn">+1 Point</button>
-            </div>
-            <div class="team girls">
-                <h3>Girls Team</h3>
-                <div class="score">0</div>
-                <button onclick="updateScore('girls')" class="score-btn">+1 Point</button>
-            </div>
-        </div>
         <div id="question-box">
             <!-- Question content will be injected here -->
         </div>
@@ -573,6 +1183,86 @@
             <button id="prevBtn" onclick="changeQuestion(-1)">Previous</button>
             <button id="finishBtn" onclick="finishContest()" class="finish-btn">Finish Contest</button>
             <button id="nextBtn" onclick="changeQuestion(1)">Next</button>
+        </div>
+    </div>
+
+    <div id="saveModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Save Progress</h3>
+                <button class="close-modal" onclick="closeModal('saveModal')">&times;</button>
+            </div>
+            <div id="saveSlots"></div>
+            <button onclick="saveProgress()" style="width: 100%;">Save Current Progress</button>
+        </div>
+    </div>
+
+    <div id="loadModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Load Progress</h3>
+                <button class="close-modal" onclick="closeModal('loadModal')">&times;</button>
+            </div>
+            <div id="loadSlots"></div>
+        </div>
+    </div>
+
+    <div id="exportModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Export Results</h3>
+                <button class="close-modal" onclick="closeModal('exportModal')">&times;</button>
+            </div>
+            <p>Choose export format:</p>
+            <div class="export-options">
+                <button onclick="exportResults('pdf')" class="pdf">
+                    📄 PDF
+                </button>
+                <button onclick="exportResults('txt')" class="txt">
+                    📝 Text
+                </button>
+            </div>
+            <div class="export-preview" id="exportPreview"></div>
+        </div>
+    </div>
+
+    <div id="disclaimerModal" class="disclaimer-modal">
+        <div class="disclaimer-content">
+            <div class="disclaimer-header">
+                <span class="disclaimer-icon">📝</span>
+                <h3>Contest Features</h3>
+            </div>
+            <div class="disclaimer-body">
+                <p>Welcome to the Zoho Interview Questions Contest! Here are some important features to help you manage your progress:</p>
+                
+                <div class="disclaimer-feature">
+                    <span class="disclaimer-feature-icon">💾</span>
+                    <div class="disclaimer-feature-text">
+                        <h4>Save Progress</h4>
+                        <p>Save your current progress at any time. You can have up to 5 save slots.</p>
+                    </div>
+                </div>
+
+                <div class="disclaimer-feature">
+                    <span class="disclaimer-feature-icon">📂</span>
+                    <div class="disclaimer-feature-text">
+                        <h4>Load Progress</h4>
+                        <p>Resume your contest from any saved point. Your score and progress will be restored.</p>
+                    </div>
+                </div>
+
+                <div class="disclaimer-feature">
+                    <span class="disclaimer-feature-icon">📊</span>
+                    <div class="disclaimer-feature-text">
+                        <h4>Export Results</h4>
+                        <p>Export your contest results in PDF or text format for your records.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="disclaimer-footer">
+                <button class="secondary" onclick="hideDisclaimer()">Skip</button>
+                <button class="primary" onclick="showSaveModal(); hideDisclaimer()">Save Now</button>
+            </div>
         </div>
     </div>
 
@@ -741,10 +1431,142 @@ int main() {
                 explanation: "Uninitialized struct members are zero by default in many compilers.",
                 options: ["(0 0)", "(1 1)", "Compilation Error", "Runtime Error"]
             },
-
-
-
-
+            {
+                title: "11. Algorithm",
+                code: `int main() {
+    printf("%d %d %d %d\\n", 72, 072, 0x72, 0X72);
+    return 0;
+}`,
+                output: "72 58 114 114",
+                explanation: "`072` is octal (base 8), `0x72` is hexadecimal (base 16).",
+                options: ["72 58 114 114", "72 72 72 72", "Error", "None"]
+            },
+            {
+                title: "12. Operator and Expression",
+                code: `void main() {
+    char ch;
+    int a;
+    float b;
+    printf("bytes occupied by ch-%d\\n", sizeof(ch));
+    printf("bytes occupied by a-%d\\n", sizeof(a));
+    printf("bytes occupied by b-%d\\n", sizeof(b));
+}`,
+                output: "Bytes occupied by ch-1\nBytes occupied by a-4\nBytes occupied by b-4",
+                explanation: "Standard sizes on 32-bit systems: char=1, int=4, float=4.",
+                options: ["1 4 4", "1 2 4", "4 4 4", "Error"]
+            },
+            {
+                title: "13. Operator and Expressions",
+                code: `void main() {
+    printf("%d\\n", sizeof('7'));
+    printf("%d\\n", sizeof(7));
+    printf("%d\\n", sizeof(7.0));
+}`,
+                output: "4 4 8",
+                explanation: "'7' is an int literal, 7 is int, 7.0 is double.",
+                options: ["4 4 8", "1 4 8", "4 2 8", "Error"]
+            },
+            {
+                title: "14. Datatypes",
+                code: `void main() {
+    char ch = 291;  
+    printf("%d %d %c\\n", 2147483648, ch, ch);
+}`,
+                output: "-2147483648 35 #",
+                explanation: "Integer overflow and implicit char casting.",
+                options: ["-2147483648 35 #", "2147483648 291 ?", "Error", "None"]
+            },
+            {
+                title: "15. Datatypes",
+                code: `void main() {
+    int g;
+    g = 300000 * 300000 / 300000;
+    printf("g-%d\\n", g);
+}`,
+                output: "-647",
+                explanation: "Overflow in multiplication results in incorrect value.",
+                options: ["-647", "300000", "0", "Error"]
+            },
+            {
+                title: "16. Operator and Expression",
+                code: `void main() {
+    int x = 10, y = 5, p, q;
+    p = x > 9;
+    q = x > 3 && y != -3;
+    printf("p-%d q-%d\\n", p, q);
+}`,
+                output: "p-1 q-1",
+                explanation: "Both logical conditions are true.",
+                options: ["p-1 q-1", "p-0 q-1", "p-1 q-0", "p-0 q-0"]
+            },
+            {
+                title: "17. String Indexing",
+                code: `#include <stdio.h>
+int main() {
+    char str[] = "Aptitude";
+    printf("%s %s %s\\n", &str[5], &5[str], str+5);
+    printf("%c %c %c\\n", *(str+6), str[6], 6[str]);
+    return 0;
+}`,
+                output: "ude ude ude\nu u u",
+                explanation: "All expressions access the same character location.",
+                options: ["ude ude ude\\nu u u", "tude tude tude\\nt t t", "Error", "None"]
+            },
+            {
+                title: "18. Array Function",
+                code: `#include <stdio.h>
+#define SIZE(arr) sizeof(arr)/sizeof(*arr)
+void fun(int* arr, int n) {
+    *arr += *(arr + n - 1) += 10;
+}
+void printArr(int* arr, int n) {
+    for(int i = 0; i < n; ++i)
+        printf("%d ", arr[i]);
+}
+int main() {
+    int arr[] = {10, 20, 30};
+    int size = SIZE(arr);
+    fun(arr, size);
+    printArr(arr, size);
+    return 0;
+}`,
+                output: "50 20 40",
+                explanation: "Modifies both the first and last elements of array.",
+                options: ["50 20 40", "10 20 30", "40 20 40", "Error"]
+            },
+            {
+                title: "19. Invalid Struct",
+                code: `#include <stdio.h>
+struct st {
+    int x;
+    struct st next;
+};
+int main() {
+    struct st temp;
+    temp.x = 10;
+    temp.next = temp;
+    printf("%d", temp.next.x);
+    return 0;
+}`,
+                output: "Compilation Error",
+                explanation: "Self-referencing structure causes error (incomplete type).",
+                options: ["10", "Compilation Error", "0", "Segmentation Fault"]
+            },
+            {
+                title: "20. Union Size",
+                code: `union test {
+    int x;
+    char arr[8];
+    int y;
+};
+int main() {
+    printf("%d", sizeof(union test));
+    return 0;
+}`,
+                output: "8",
+                explanation: "Size of largest member in union is 8 (arr[8]).",
+                options: ["4", "8", "12", "Error"]
+            }
         ];
 
         questions.push(
@@ -779,7 +1601,7 @@ int main() {
     printf("%d\\n", sizeof(7));
     printf("%d\\n", sizeof(7.0));
 }`,
-                output: "4\n4\n8",
+                output: "4 4 8",
                 explanation: "'7' is an int literal, 7 is int, 7.0 is double.",
                 options: ["4 4 8", "1 4 8", "4 2 8", "Error"]
             },
@@ -886,168 +1708,6 @@ int main() {
             }
         );
 
-        questions.push(
-            {
-                title: "21. Pointer to Pointer Array",
-                code: `#include <stdio.h>
-char *c[] = {"GeksQuiz", "MCQ", "TEST", "QUIZ"};
-char **cp[] = {c+3, c+2, c+1, c};
-char ***cpp = cp;
-int main() {
-    printf("%s ", **++cpp);
-    printf("%s ", *--*++cpp+3);
-    printf("%s ", *cpp[-2]+3);
-    printf("%s ", cpp[-1][-1]+1);
-    return 0;
-}`,
-                output: "TEST sQuiz Z CQ",
-                explanation: "Pointer arithmetic and indexing on char**.",
-                options: ["TEST sQuiz Z CQ", "QUIZ TEST MCQ GeksQuiz", "TEST QUIZ MCQ MC", "Error"]
-            },
-            {
-                title: "22. Loops",
-                code: `#include <stdio.h>
-void main() {
-    int n = 21;
-    int out = 1;
-    while(n > 3) {
-        n /= 2;
-        out *= (n / 2);
-    }
-    printf("%d", n * out);
-}`,
-                output: "20",
-                explanation: "Simple loop with integer division and product.",
-                options: ["20", "18", "12", "10"]
-            },
-            {
-                title: "23. Array and Pointer",
-                code: `#include <stdio.h>
-int main() {
-    int n[] = {8,1,3,9,4};
-    int j, *y = n;
-    for(j = 0; j < 5; j++) {
-        if(j % 2 == 0)
-            *y++;
-    }
-    printf("%d", *y);
-    return 0;
-}`,
-                output: "9",
-                explanation: "Pointer y increments on even j; ends up at n[3] = 9.",
-                options: ["9", "3", "4", "8"]
-            },
-            {
-                title: "24. XOR Comparison",
-                code: `#include <stdio.h>
-int main() {
-    int x = 10;
-    int y = 20;
-    if(!(x ^ y))
-        printf("0");
-    else
-        printf("1");
-    return 0;
-}`,
-                output: "1",
-                explanation: "XOR of unequal numbers ≠ 0, so result is 1.",
-                options: ["0", "1", "10", "20"]
-            },
-            {
-                title: "25. 2D Array Pointer Operation",
-                code: `#include <stdio.h>
-int main() {
-    int a[10][10] = {{1,2},{3,4},{5,6},{7,8},{9,10}};
-    int *p = a[3];
-    int result = (*p + 2) * a[4][1] + (++*p) + (*p + 13);
-    printf("%d", result);
-    return 0;
-}`,
-                output: "119",
-                explanation: "Complex pointer arithmetic on 2D array.",
-                options: ["119", "134", "108", "Error"]
-            },
-            {
-                title: "26. Pointers to Pointers",
-                code: `#include <stdio.h>
-int calc(int x, int *py, int **ppz) {
-    int y, z;
-    **ppz += 1;
-    z = **ppz;
-    *py += **ppz;
-    y = *py;
-    x += *py;
-    return x + y + z;
-}
-void main() {
-    int c, *b, **a;
-    c = 5;
-    b = &c;
-    a = &b;
-    printf("%d", calc(c, b, a));
-}`,
-                output: "35",
-                explanation: "Function manipulates variables via pointers and double pointers.",
-                options: ["35", "40", "25", "30"]
-            },
-            {
-                title: "27. Macro Evaluation",
-                code: `#define SQR(x) (x*x)
-int main() {
-    int a, b = 3;
-    a = SQR(b+2);
-    printf("%d", a);
-}`,
-                output: "11",
-                explanation: "Macro expands to (b+2*b+2) => 3+6+2 = 11",
-                options: ["11", "25", "10", "9"]
-            },
-            {
-                title: "28. Loop and Print",
-                code: `int main() {
-    int i;
-    int arr[5] = {1};
-    for(i = 0; i < 5; i++)
-        printf("%d", i);
-}`,
-                output: "01234",
-                explanation: "Simple loop prints indices 0 to 4.",
-                options: ["01234", "12345", "00000", "Error"]
-            },
-            {
-                title: "29. Assignment in If",
-                code: `int main() {
-    int x = 0;
-    if(x = 0)
-        printf("value of x is zero");
-    else
-        printf("value of x is not zero");
-}`,
-                output: "value of x is not zero",
-                explanation: "Assignment used instead of comparison; evaluates to false.",
-                options: ["value of x is zero", "value of x is not zero", "Error", "No Output"]
-            },
-            {
-                title: "30. Switch Fallthrough",
-                code: `int main() {
-    int i = 0;
-    for(i = 0; i < 20; i++) {
-        switch(i) {
-            case 0: i += 5;
-            case 1: i += 2;
-            case 5: i += 5;
-            default: i += 4;
-                     break;
-        }
-        printf("%d", i);
-    }
-}`,
-                output: "1621",
-                explanation: "Switch statements fall through without breaks.",
-                options: ["1621", "065", "1519", "Error"]
-            }
-        );
-
 
 
         let currentIndex = 0;
@@ -1066,35 +1726,69 @@ int main() {
             // Create a copy of options and shuffle them
             const shuffledOptions = shuffleArray([...q.options]);
 
+            // Normalize the output for display
+            const normalizeText = (text) => {
+                return text.replace(/\\n/g, ' ')
+                         .replace(/\n/g, ' ')
+                         .replace(/\s+/g, ' ')
+                         .trim();
+            };
+
+            const normalizedOutput = normalizeText(q.output);
+
             document.getElementById("question-box").innerHTML = `
-        <h2>${q.title}</h2>
-        <pre><code>${q.code}</code></pre>
-        <div class="options">
-          ${shuffledOptions.map((option, i) => `
-            <div class="option" onclick="checkAnswer(${index}, '${option}')">
-              ${option}
-            </div>
-          `).join('')}
-        </div>
-        <div id="explanation-${index}" class="explanation" style="display: none;">
-          <p><strong>Output:</strong> ${q.output}</p>
-          <p><strong>Explanation:</strong> ${q.explanation}</p>
-        </div>
-      `;
+                <h2>${q.title}</h2>
+                <pre><code>${q.code}</code></pre>
+                <div class="options">
+                    ${shuffledOptions.map((option, i) => `
+                        <div class="option" onclick="checkAnswer(${index}, '${option.replace(/'/g, "\\'")}')">
+                            ${option}
+                        </div>
+                    `).join('')}
+                </div>
+                <div id="explanation-${index}" class="explanation" style="display: none;">
+                    <p><strong>Output:</strong> ${normalizedOutput}</p>
+                    <p><strong>Explanation:</strong> ${q.explanation}</p>
+                </div>
+            `;
 
             document.getElementById("prevBtn").disabled = index === 0;
             document.getElementById("nextBtn").disabled = index === questions.length - 1;
             document.getElementById("finishBtn").disabled = false;
         }
 
-        let teamScores = {
-            boys: 0,
-            girls: 0
-        };
+        let currentScore = 0;
+        let answeredQuestions = new Set();
+        let unansweredQuestions = new Set();
 
-        function updateScore(team) {
-            teamScores[team]++;
-            document.querySelector(`.team.${team} .score`).textContent = teamScores[team];
+        // Initialize unanswered questions
+        function initializeUnansweredQuestions() {
+            unansweredQuestions.clear();
+            questions.forEach((_, index) => unansweredQuestions.add(index));
+            updateUnansweredSidebar();
+        }
+
+        function updateUnansweredSidebar() {
+            const sidebar = document.querySelector('.unanswered-list');
+            const count = document.querySelector('.unanswered-count');
+            
+            // Update count
+            count.textContent = unansweredQuestions.size;
+            
+            // Update list
+            sidebar.innerHTML = Array.from(unansweredQuestions)
+                .sort((a, b) => a - b)
+                .map(num => `
+                    <div class="unanswered-item ${num === currentIndex ? 'current' : ''}" 
+                         onclick="changeQuestion(${num - currentIndex})">
+                        Question ${num + 1}
+                    </div>
+                `).join('');
+        }
+
+        function updateScore() {
+            currentScore++;
+            document.querySelector('.score-display .score').textContent = currentScore;
         }
 
         function checkAnswer(questionIndex, selectedAnswer) {
@@ -1110,23 +1804,41 @@ int main() {
                 option.classList.remove('correct', 'incorrect');
             });
 
-            // Highlight the correct answer
+            // Normalize the output and selected answer for comparison
+            const normalizedOutput = question.output.replace(/\\n/g, '\n').trim();
+            const normalizedSelected = selectedAnswer.replace(/\\n/g, '\n').trim();
+
+            // Highlight the correct answer and check if selected answer is correct
+            let isCorrect = false;
             options.forEach(option => {
-                if (option.textContent.trim() === question.output) {
+                const optionText = option.textContent.trim();
+                if (optionText === normalizedOutput) {
                     option.classList.add('correct');
                 }
                 // If this is the selected answer and it's wrong, mark it as incorrect
-                if (option.textContent.trim() === selectedAnswer && selectedAnswer !== question.output) {
-                    option.classList.add('incorrect');
+                if (optionText === normalizedSelected) {
+                    if (normalizedSelected === normalizedOutput) {
+                        isCorrect = true;
+                    } else {
+                        option.classList.add('incorrect');
+                    }
                 }
             });
+
+            // Update score if answer is correct and question hasn't been answered before
+            if (isCorrect && !answeredQuestions.has(questionIndex)) {
+                updateScore();
+                answeredQuestions.add(questionIndex);
+            }
+
+            // Remove from unanswered questions
+            unansweredQuestions.delete(questionIndex);
+            updateUnansweredSidebar();
 
             // Disable all options after selection
             options.forEach(option => {
                 option.style.pointerEvents = 'none';
             });
-
-            // Don't automatically update score - let the teacher decide which team gets the point
         }
 
         let celebrationInterval = null;
@@ -1223,12 +1935,8 @@ int main() {
             cleanupCelebration();
 
             const popup = document.getElementById('winnerPopup');
-            const winnerTeam = teamScores.boys > teamScores.girls ? 'Boys Team' :
-                teamScores.girls > teamScores.boys ? 'Girls Team' : 'It\'s a Tie!';
-
-            document.getElementById('winnerTeam').textContent = winnerTeam;
-            document.getElementById('finalBoysScore').textContent = teamScores.boys;
-            document.getElementById('finalGirlsScore').textContent = teamScores.girls;
+            document.getElementById('finalScore').textContent = currentScore;
+            document.getElementById('totalQuestions').textContent = questions.length;
 
             // Play audio and show popup
             const audio = document.getElementById('winnerAudio');
@@ -1273,11 +1981,11 @@ int main() {
             // Clean up celebration
             cleanupCelebration();
 
-            // Reset scores
-            teamScores.boys = 0;
-            teamScores.girls = 0;
-            document.querySelector('.team.boys .score').textContent = '0';
-            document.querySelector('.team.girls .score').textContent = '0';
+            // Reset score and questions
+            currentScore = 0;
+            answeredQuestions.clear();
+            document.querySelector('.score-display .score').textContent = '0';
+            initializeUnansweredQuestions();
 
             // Hide popup
             const popup = document.getElementById('winnerPopup');
@@ -1313,8 +2021,446 @@ int main() {
         // Initial render
         renderQuestion(currentIndex);
 
+        // Initialize unanswered questions when the page loads
+        window.addEventListener('load', initializeUnansweredQuestions);
+
         // Clean up on page unload
         window.addEventListener('beforeunload', cleanupCelebration);
+
+        // Theme Management
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.querySelector('.theme-toggle');
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            // Add transition class
+            body.style.transition = 'background-color 0.5s ease, color 0.5s ease';
+            
+            // Update theme
+            body.setAttribute('data-theme', newTheme);
+            themeToggle.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Remove transition class after animation
+            setTimeout(() => {
+                body.style.transition = '';
+            }, 500);
+        }
+
+        // Load saved theme with animation
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            const themeToggle = document.querySelector('.theme-toggle');
+            document.body.setAttribute('data-theme', savedTheme);
+            themeToggle.setAttribute('data-theme', savedTheme);
+        }
+
+        // Keyboard Shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Don't trigger shortcuts if user is typing in an input
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            switch(e.key) {
+                case 'ArrowLeft':
+                    if (!document.getElementById('prevBtn').disabled) {
+                        changeQuestion(-1);
+                    }
+                    break;
+                case 'ArrowRight':
+                    if (!document.getElementById('nextBtn').disabled) {
+                        changeQuestion(1);
+                    }
+                    break;
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                    const optionIndex = parseInt(e.key) - 1;
+                    const options = document.querySelectorAll('.option');
+                    if (options[optionIndex] && !options[optionIndex].style.pointerEvents) {
+                        options[optionIndex].click();
+                    }
+                    break;
+                case 'f':
+                case 'F':
+                    if (!document.getElementById('finishBtn').disabled) {
+                        finishContest();
+                    }
+                    break;
+                case 't':
+                case 'T':
+                    toggleTheme();
+                    break;
+                case 'h':
+                case 'H':
+                    showDisclaimer();
+                    break;
+            }
+        });
+
+        // Responsive Design Improvements
+        function updateLayout() {
+            const width = window.innerWidth;
+            const container = document.querySelector('.container');
+            const sidebar = document.querySelector('.unanswered-sidebar');
+            const shortcuts = document.querySelector('.keyboard-shortcuts');
+
+            if (width <= 768) {
+                container.style.margin = '10px';
+                container.style.padding = '15px';
+                if (sidebar) {
+                    sidebar.style.position = 'static';
+                    sidebar.style.width = 'auto';
+                    sidebar.style.margin = '20px 0';
+                }
+                if (shortcuts) {
+                    shortcuts.style.display = 'none';
+                }
+            } else if (width <= 1200) {
+                container.style.margin = '20px';
+                container.style.padding = '20px';
+                if (sidebar) {
+                    sidebar.style.position = 'fixed';
+                    sidebar.style.width = '220px';
+                }
+                if (shortcuts) {
+                    shortcuts.style.display = 'block';
+                }
+            } else {
+                container.style.margin = 'auto';
+                container.style.marginRight = '250px';
+                container.style.marginLeft = '100px';
+                if (sidebar) {
+                    sidebar.style.position = 'fixed';
+                    sidebar.style.width = '220px';
+                }
+                if (shortcuts) {
+                    shortcuts.style.display = 'block';
+                }
+            }
+        }
+
+        // Initial layout update
+        updateLayout();
+
+        // Update layout on window resize
+        window.addEventListener('resize', updateLayout);
+
+        // Save/Load System
+        const MAX_SAVE_SLOTS = 5;
+
+        function getSaveData() {
+            return {
+                currentIndex,
+                currentScore,
+                answeredQuestions: Array.from(answeredQuestions),
+                unansweredQuestions: Array.from(unansweredQuestions),
+                timestamp: new Date().toISOString(),
+                totalQuestions: questions.length
+            };
+        }
+
+        function saveProgress() {
+            const saveData = getSaveData();
+            const saves = JSON.parse(localStorage.getItem('contestSaves') || '[]');
+            
+            // Add new save
+            saves.unshift(saveData);
+            
+            // Keep only the latest MAX_SAVE_SLOTS saves
+            if (saves.length > MAX_SAVE_SLOTS) {
+                saves.length = MAX_SAVE_SLOTS;
+            }
+            
+            localStorage.setItem('contestSaves', JSON.stringify(saves));
+            updateSaveSlots();
+            closeModal('saveModal');
+        }
+
+        function loadProgress(saveData) {
+            if (confirm('Load this save? Current progress will be lost.')) {
+                currentIndex = saveData.currentIndex;
+                currentScore = saveData.currentScore;
+                answeredQuestions = new Set(saveData.answeredQuestions);
+                unansweredQuestions = new Set(saveData.unansweredQuestions);
+                
+                // Update UI
+                document.querySelector('.score-display .score').textContent = currentScore;
+                renderQuestion(currentIndex);
+                updateUnansweredSidebar();
+                closeModal('loadModal');
+            }
+        }
+
+        function deleteSave(index) {
+            const saves = JSON.parse(localStorage.getItem('contestSaves') || '[]');
+            saves.splice(index, 1);
+            localStorage.setItem('contestSaves', JSON.stringify(saves));
+            updateSaveSlots();
+        }
+
+        function updateSaveSlots() {
+            const saves = JSON.parse(localStorage.getItem('contestSaves') || '[]');
+            const saveSlots = document.getElementById('saveSlots');
+            const loadSlots = document.getElementById('loadSlots');
+            
+            const renderSlot = (save, index, isLoad = false) => {
+                const date = new Date(save.timestamp);
+                const progress = Math.round((save.answeredQuestions.length / save.totalQuestions) * 100);
+                return `
+                    <div class="save-slot ${index === 0 ? 'active' : ''}">
+                        <div class="timestamp">${date.toLocaleString()}</div>
+                        <div class="progress">Progress: ${progress}% (${save.currentScore} points)</div>
+                        ${isLoad ? `
+                            <div class="actions">
+                                <button onclick="loadProgress(${JSON.stringify(save)})">Load</button>
+                                <button onclick="deleteSave(${index})">Delete</button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            };
+
+            saveSlots.innerHTML = saves.map((save, index) => renderSlot(save, index)).join('');
+            loadSlots.innerHTML = saves.map((save, index) => renderSlot(save, index, true)).join('');
+        }
+
+        function showSaveModal() {
+            updateSaveSlots();
+            document.getElementById('saveModal').style.display = 'flex';
+        }
+
+        function showLoadModal() {
+            updateSaveSlots();
+            document.getElementById('loadModal').style.display = 'flex';
+        }
+
+        function showExportModal() {
+            const data = getDetailedResults();
+            const textContent = generateTextContent(data);
+            document.getElementById('exportPreview').textContent = textContent;
+            document.getElementById('exportModal').style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function getDetailedResults() {
+            const saveData = getSaveData();
+            const answeredQuestionsList = Array.from(answeredQuestions).map(index => ({
+                number: index + 1,
+                title: questions[index].title,
+                correct: true
+            }));
+            const unansweredQuestionsList = Array.from(unansweredQuestions).map(index => ({
+                number: index + 1,
+                title: questions[index].title,
+                correct: false
+            }));
+
+            return {
+                ...saveData,
+                answeredQuestionsList,
+                unansweredQuestionsList,
+                timestamp: new Date(saveData.timestamp).toLocaleString(),
+                score: saveData.currentScore,
+                totalQuestions: saveData.totalQuestions,
+                progress: Math.round((saveData.answeredQuestions.length / saveData.totalQuestions) * 100)
+            };
+        }
+
+        function generateTextContent(data) {
+            return `Zoho Interview Questions Contest Results
+===========================================
+
+Contest Details:
+---------------
+Date & Time: ${data.timestamp}
+Score: ${data.score} points
+Progress: ${data.progress}%
+Total Questions: ${data.totalQuestions}
+
+Performance Summary:
+------------------
+Answered Questions: ${data.answeredQuestions.length}
+Unanswered Questions: ${data.unansweredQuestions.length}
+
+Answered Questions:
+-----------------
+${data.answeredQuestionsList.map(q => `✓ Question ${q.number}: ${q.title}`).join('\n')}
+
+Unanswered Questions:
+-------------------
+${data.unansweredQuestionsList.map(q => `○ Question ${q.number}: ${q.title}`).join('\n')}
+
+End of Report
+============`;
+        }
+
+        function exportResults(format) {
+            const data = getDetailedResults();
+            const textContent = generateTextContent(data);
+            
+            // Show preview
+            document.getElementById('exportPreview').textContent = textContent;
+
+            if (format === 'txt') {
+                const blob = new Blob([textContent], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `contest-results-${new Date().toISOString().split('T')[0]}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } else if (format === 'pdf') {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                // Add title
+                doc.setFontSize(20);
+                doc.text('Zoho Interview Questions Contest Results', 20, 20);
+                
+                // Add contest details
+                doc.setFontSize(12);
+                doc.text('Contest Details:', 20, 40);
+                doc.setFontSize(11);
+                doc.text([
+                    `Date & Time: ${data.timestamp}`,
+                    `Score: ${data.score} points`,
+                    `Progress: ${data.progress}%`,
+                    `Total Questions: ${data.totalQuestions}`
+                ], 20, 50);
+
+                // Add performance summary
+                doc.setFontSize(12);
+                doc.text('Performance Summary:', 20, 80);
+                doc.setFontSize(11);
+                doc.text([
+                    `Answered Questions: ${data.answeredQuestions.length}`,
+                    `Unanswered Questions: ${data.unansweredQuestions.length}`
+                ], 20, 90);
+
+                // Add answered questions table
+                doc.setFontSize(12);
+                doc.text('Answered Questions:', 20, 110);
+                doc.autoTable({
+                    startY: 115,
+                    head: [['Question', 'Title']],
+                    body: data.answeredQuestionsList.map(q => [`${q.number}`, q.title]),
+                    theme: 'grid',
+                    headStyles: { fillColor: [231, 76, 60] }
+                });
+
+                // Add unanswered questions table
+                const lastTable = doc.lastAutoTable;
+                const lastTableEndY = lastTable.finalY;
+                doc.setFontSize(12);
+                doc.text('Unanswered Questions:', 20, lastTableEndY + 20);
+                doc.autoTable({
+                    startY: lastTableEndY + 25,
+                    head: [['Question', 'Title']],
+                    body: data.unansweredQuestionsList.map(q => [`${q.number}`, q.title]),
+                    theme: 'grid',
+                    headStyles: { fillColor: [52, 152, 219] }
+                });
+
+                // Save the PDF
+                doc.save(`contest-results-${new Date().toISOString().split('T')[0]}.pdf`);
+            }
+
+            closeModal('exportModal');
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Initialize save slots on page load
+        window.addEventListener('load', () => {
+            initializeUnansweredQuestions();
+            updateSaveSlots();
+        });
+
+        // Disclaimer Management
+        function showDisclaimer() {
+            document.getElementById('disclaimerModal').style.display = 'flex';
+        }
+
+        function hideDisclaimer() {
+            document.getElementById('disclaimerModal').style.display = 'none';
+            // Save that disclaimer has been shown
+            localStorage.setItem('disclaimerShown', 'true');
+        }
+
+        // Show disclaimer on page load if not shown before
+        window.addEventListener('load', () => {
+            initializeUnansweredQuestions();
+            updateSaveSlots();
+            
+            // Show disclaimer if it hasn't been shown before
+            if (!localStorage.getItem('disclaimerShown')) {
+                showDisclaimer();
+            }
+        });
+
+        // Modify the showWinnerPopup function to show disclaimer after results
+        const originalShowWinnerPopup = showWinnerPopup;
+        showWinnerPopup = function() {
+            originalShowWinnerPopup();
+            // Show disclaimer after a short delay
+            setTimeout(() => {
+                showDisclaimer();
+            }, 2000);
+        };
+
+        // Add keyboard shortcut to show disclaimer
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'h' || e.key === 'H') {
+                showDisclaimer();
+            }
+        });
+
+        // Update keyboard shortcuts panel to include help shortcut
+        document.querySelector('.keyboard-shortcuts').insertAdjacentHTML('beforeend', `
+            <div class="shortcut-item">
+                <span>Show Features</span>
+                <span class="key">H</span>
+            </div>
+        `);
+
+        // Add keyboard shortcuts toggle functionality
+        function toggleShortcuts() {
+            const shortcuts = document.querySelector('.keyboard-shortcuts');
+            const fab = document.querySelector('.shortcut-fab');
+            shortcuts.classList.toggle('visible');
+            fab.classList.toggle('active');
+        }
+
+        // Close shortcuts when clicking outside
+        document.addEventListener('click', function(event) {
+            const shortcuts = document.querySelector('.keyboard-shortcuts');
+            const fab = document.querySelector('.shortcut-fab');
+            if (!shortcuts.contains(event.target) && !fab.contains(event.target)) {
+                shortcuts.classList.remove('visible');
+                fab.classList.remove('active');
+            }
+        });
+
+        // Add keyboard shortcut to toggle shortcuts panel
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'k' || e.key === 'K') {
+                toggleShortcuts();
+            }
+        });
     </script>
 
 </body>
