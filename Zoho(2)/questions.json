@@ -1,0 +1,352 @@
+{
+  "questions": [
+    {
+      "title": "1. Arrays",
+      "code": "void main()\n{\n    int s[] = {1, 5, 0, 10, 0};\n    int f[] = {2, 4, 6, 8, 10, 12};\n    int n = 6, i = 0, j = 0;\n    for(j = 1; j < n; j++)\n    {\n        if(s[j] > f[i])\n            printf(\"%d\", i);\n        i = j;\n    }\n}",
+      "output": "02",
+      "explanation": "The loop checks values from s[] against f[], printing i if the condition is met.",
+      "options": [
+        "02",
+        "12",
+        "00",
+        "None of these"
+      ]
+    },
+    {
+      "title": "2. Functions",
+      "code": "void f(int *a, int m)\n{\n    int j = 0;\n    for(j = 0; j < m; j++)\n        a[j] = j;\n}\nvoid main()\n{\n    int a[5], i;\n    f(a, 5);\n    for(i = 0; i < 5; i++)\n        printf(\"%d \", a[i]);\n}",
+      "output": "0 1 2 3 4",
+      "explanation": "Function f initializes array elements with their indices.",
+      "options": [
+        "0 1 2 3 4",
+        "1 2 3 4 5",
+        "0 0 0 0 0",
+        "None of these"
+      ]
+    },
+    {
+      "title": "11. Algorithm",
+      "code": "int main() {\n    printf(\"%d %d %d %d\\n\", 72, 072, 0x72, 0X72);\n    return 0;\n}",
+      "output": "72 58 114 114",
+      "explanation": "072 is octal (58), 0x72 and 0X72 are hexadecimal (114).",
+      "options": [
+        "72 58 114 114",
+        "72 72 114 114",
+        "Error",
+        "None of these"
+      ]
+    },
+    {
+      "title": "12. Operator and Expression",
+      "code": "void main()\n{\n    char ch;\n    int a;\n    float b;\n    printf(\"bytes occupied by ch-%d\\n\", sizeof(ch));\n    printf(\"bytes occupied by a-%d\\n\", sizeof(a));\n    printf(\"bytes occupied by b-%d\\n\", sizeof(b));\n}",
+      "output": "Bytes occupied by ch-1\nBytes occupied by a-4\nBytes occupied by b-4",
+      "explanation": "sizeof(char)=1, sizeof(int)=4, sizeof(float)=4 (on most systems).",
+      "options": [
+        "Bytes occupied by ch-1\nBytes occupied by a-4\nBytes occupied by b-4",
+        "1 4 4",
+        "2 4 8",
+        "None of these"
+      ]
+    },
+    {
+      "title": "13. Operator and Expressions",
+      "code": "void main()\n{\n    printf(\"%d\\n\", sizeof('7'));\n    printf(\"%d\\n\", sizeof(7));\n    printf(\"%d\\n\", sizeof(7.0));\n}",
+      "output": "4\n4\n8",
+      "explanation": "sizeof('7') is int (4), 7 is int (4), 7.0 is double (8).",
+      "options": [
+        "4\n4\n8",
+        "1\n4\n8",
+        "4\n2\n8",
+        "None of these"
+      ]
+    },
+    {
+      "title": "14. Datatypes",
+      "code": "void main()\n{\n    char ch = 291;\n    printf(\"%d %d %c\\n\", 2147483648, ch, ch);\n    return 0;\n}",
+      "output": "-2147483648 35 #",
+      "explanation": "Integer overflow and char overflow result in these values.",
+      "options": [
+        "-2147483648 35 #",
+        "2147483648 35 #",
+        "Error",
+        "None of these"
+      ]
+    },
+    {
+      "title": "15. Datatypes",
+      "code": "void main()\n{\n    int g;\n    g = 300000 * 300000 / 300000;\n    printf(\"g-%d\\n\", g);\n}",
+      "output": "-647",
+      "explanation": "Integer overflow occurs during multiplication.",
+      "options": [
+        "-647",
+        "300000",
+        "Error",
+        "None of these"
+      ]
+    },
+    {
+      "title": "16. Operator and Expression",
+      "code": "void main()\n{\n    int x = 10, y = 5, p, q;\n    p = x > 9;\n    q = x > 3 && y != -3;\n    printf(\"p-%d q-%d\\n\", p, q);\n}",
+      "output": "p-1 q-1",
+      "explanation": "Both conditions are true, so p=1, q=1.",
+      "options": [
+        "p-1 q-1",
+        "p-0 q-1",
+        "p-1 q-0",
+        "None of these"
+      ]
+    },
+    {
+      "title": "17. String Pointer Arithmetic",
+      "code": "#include <stdio.h>\nint main()\n{\n    char str[] = \"Aptitude\";\n    printf(\"%s %s %s\\n\", &str, &5[str], str+5);\n    printf(\"%c %c %c\\n\", *(str+6), str, 6[str]);\n    return 0;\n}",
+      "output": "ude ude ude\nu u u",
+      "explanation": "&str, &5[str], and str+5 all point to the 6th character of str, which is 'u'. *(str+6), str, and 6[str] all access the 7th character of str, which is 'u'.",
+      "options": [
+        "ude ude ude\nu u u",
+        "de de de\ne e e",
+        "Error",
+        "None of these"
+      ]
+    },
+    {
+      "title": "18. Array Macro and Function",
+      "code": "#include <stdio.h>\n#define SIZE(arr) sizeof(arr) / sizeof(*arr)\nvoid fun(int* arr, int n)\n{\n    int i;\n    *arr += *(arr + n - 1) += 10;\n}\nvoid printArr(int* arr, int n)\n{\n    int i;\n    for(i = 0; i < n; i++)\n        printf(\"%d \", arr[i]);\n}\nint main()\n{\n    int arr[] = {10, 20, 30};\n    int n = SIZE(arr);\n    fun(arr, n);\n    printArr(arr, n);\n    return 0;\n}",
+      "output": "20 20 40",
+      "explanation": "The fun function modifies the first and last elements of the array.",
+      "options": [
+        "20 20 40",
+        "10 20 30",
+        "30 20 10",
+        "None of these"
+      ]
+    },
+    {
+      "title": "19. Struct",
+      "code": "#include <stdio.h>\nstruct st {\n    int x;\n    struct st next;\n};\nint main()\n{\n    struct st temp;\n    temp.x = 10;\n    temp.next = temp;\n    printf(\"%d\", temp.next.x);\n    return 0;\n}",
+      "output": "Compile error",
+      "explanation": "A struct cannot contain a member of its own type directly. This would create an infinite recursion in the struct definition.",
+      "options": [
+        "Compile error",
+        "10",
+        "0",
+        "None of these"
+      ]
+    },
+    {
+      "title": "20. Union Size",
+      "code": "union test {\n    int x;\n    char arr[8];\n    int y;\n};\nint main() {\n    printf(\"%d\", sizeof(union test));\n    return 0;\n}",
+      "output": "8",
+      "explanation": "The size of the union is determined by the size of its largest member. arr is the largest member, occupying 8 bytes.",
+      "options": [
+        "8",
+        "4",
+        "12",
+        "None of these"
+      ]
+    },
+    {
+      "title": "21. Pointer Array Puzzles",
+      "code": "#include <stdio.h>\nchar *c[] = {\"GeksQuiz\", \"MCQ\", \"TEST\", \"QUIZ\"};\nchar **cp[] = {c+3, c+2, c+1, c};\nchar ***cpp = cp;\nint main() {\n    printf(\"%s \", **++cpp);\n    printf(\"%s \", *--*++cpp+3);\n    printf(\"%s \", *cpp[-2]+3);\n    printf(\"%s \", cpp[-1][-1]+1);\n    return 0;\n}",
+      "output": "TEST sQuiz Z CQ",
+      "explanation": "Pointer arithmetic and dereferencing produce these outputs.",
+      "options": [
+        "TEST sQuiz Z CQ",
+        "QUIZ MCQ TEST GeksQuiz",
+        "Error",
+        "None of these"
+      ]
+    },
+    {
+      "title": "22. Loop and Arithmetic",
+      "code": "#include <stdio.h>\nvoid main() {\n    int n = 21;\n    int out = 1;\n    while(n > 3) {\n        n /= 2;\n        out *= (n / 2);\n    }\n    printf(\"%d\", n * out);\n}",
+      "output": "20",
+      "explanation": "The loop divides n by 2 and multiplies out by n/2 until n <= 3.",
+      "options": [
+        "20",
+        "10",
+        "5",
+        "None of these"
+      ]
+    },
+    {
+      "title": "23. Array and Pointer",
+      "code": "int main() {\n    int n[] = {8,1,3,9,4};\n    int j, *y = n;\n    for(j = 0; j < 5; j++) {\n        printf(\"%d \", *y);\n        y++;\n    }\n    return 0;\n}",
+      "output": "8 1 3 9 4",
+      "explanation": "The pointer y traverses the array, printing each element.",
+      "options": [
+        "8 1 3 9 4",
+        "4 9 3 1 8",
+        "Error",
+        "None of these"
+      ]
+    },
+    {
+      "title": "24. Bitwise Operations",
+      "code": "int main() {\n    int x = 10;\n    int y = 20;\n    if(!(x ^ y))\n        printf(\"0\");\n    else\n        printf(\"1\");\n    return 0;\n}",
+      "output": "1",
+      "explanation": "x ^ y is non-zero, so !(x ^ y) is false, and 1 is printed.",
+      "options": [
+        "1",
+        "0",
+        "Error",
+        "None of these"
+      ]
+    },
+    {
+      "title": "25. 2D Array and Pointer Arithmetic",
+      "code": "#include <stdio.h>\nint main() {\n    int a[5][2] = {{1,2},{3,4},{5,6},{7,8},{9,10}};\n    int *p = (int *)a;\n    int result = (*p + 2) * a[0][0] + (++*p) + (*p + 13);\n    printf(\"%d\", result);\n    return 0;\n}",
+      "output": "119",
+      "explanation": "Pointer arithmetic and dereferencing produce this result.",
+      "options": [
+        "119",
+        "120",
+        "Error",
+        "None of these"
+      ]
+    },
+    {
+      "title": "26. Pointer and Function Arguments",
+      "code": "#include <stdio.h>\nint calc(int x, int *py, int **ppz) {\n    int y, z;\n    **ppz += 1;\n    z = **ppz;\n    *py += **ppz;\n    y = *py;\n    x += *py;\n    return x + y + z;\n}\nvoid main() {\n    int c, *b, **a;\n    c = 5;\n    b = &c;\n    a = &b;\n    printf(\"%d\", calc(c, b, a));\n}",
+      "output": "35",
+      "explanation": "The function modifies values via pointers and returns the computed sum.",
+      "options": [
+        "35",
+        "15",
+        "25",
+        "None of these"
+      ]
+    },
+    {
+      "title": "27. Macro Expansion",
+      "code": "#define SQR(x) (x*x)\nmain()\n{\n    int a, b=3;\n    a = SQR(b+2);\n    printf(\"%d\", a);\n}",
+      "output": "11",
+      "explanation": "SQR(b+2) expands to (b+2*b+2), i.e., 3+2*3+2 = 3+6+2 = 11.",
+      "options": [
+        "11",
+        "25",
+        "16",
+        "None of these"
+      ]
+    },
+    {
+      "title": "28. Array Initialization and Loop",
+      "code": "int main()\n{\n    int i;\n    int arr[5] = {1};\n    for(i = 0; i < 5; i++)\n        printf(\"%d\", i);\n}",
+      "output": "01234",
+      "explanation": "The loop prints the values of i from 0 to 4.",
+      "options": [
+        "01234",
+        "12345",
+        "54321",
+        "None of these"
+      ]
+    },
+    {
+      "title": "29. Assignment in Condition",
+      "code": "main()\n{\n    int x=0;\n    if(x=0)\n        printf(\"value of x is zero\");\n    else\n        printf(\"value of x is not zero\");\n}",
+      "output": "value of x is not zero",
+      "explanation": "if(x=0) assigns 0 to x, which is false. Thus, the else branch is executed.",
+      "options": [
+        "value of x is not zero",
+        "value of x is zero",
+        "Error",
+        "None of these"
+      ]
+    },
+    {
+      "title": "30. Switch Fallthrough",
+      "code": "main()\n{\n    int i=0;\n    for(i=0; i<20; i++)\n    {\n        switch(i)\n        {\n            case 0: i+=5;\n            case 1: i+=2;\n            case 5: i+=5;\n            default: i+=4;\n                     break;\n        }\n        printf(\"%d\", i);\n    }\n}",
+      "output": "1621",
+      "explanation": "Switch cases fall through, causing i to increment in steps and print 16 and 21.",
+      "options": [
+        "1621",
+        "01234",
+        "54321",
+        "None of these"
+      ]
+    },
+    {
+      "title": "31. Post/Pre-Increment",
+      "code": "main()\n{\n    int x=20, y=35;\n    x = y++ + x++;\n    y = ++y + ++x;\n    printf(\"%d%d\", x, y);\n}",
+      "output": "5693",
+      "explanation": "Initial: x=20, y=35.\n1. x = y++ + x++: y (35) is used, then y becomes 36. x (20) is used, then x becomes 21. x = 35 + 20 = 55. After this, x=55, y=36.\n2. y = ++y + ++x: y becomes 37, then 37 is used. x becomes 56, then 56 is used. y = 37 + 56 = 93. After this, x=56, y=93. Output: 5693.",
+      "options": [
+        "5729",
+        "5537",
+        "2020",
+        "None of these"
+      ]
+    },
+    {
+      "title": "32. Pointer Arithmetic with String",
+      "code": "int main()\n{\n    printf(5+\"welcome\");\n}",
+      "output": "me",
+      "explanation": "Pointer arithmetic prints string starting from the 5th index.",
+      "options": [
+        "me",
+        "welcome",
+        "ome",
+        "None of these"
+      ]
+    },
+    {
+      "title": "33. String Indexing",
+      "code": "int main()\n{\n    printf(\"%c\", 5[\"welcomeall\"]);\n}",
+      "output": "m",
+      "explanation": "Equivalent to printf(\"%c\", \"welcomeall\"[5]);",
+      "options": [
+        "m",
+        "e",
+        "a",
+        "None of these"
+      ]
+    },
+    {
+      "title": "34. Printf Return Value",
+      "code": "int main()\n{\n    int x = printf(\"welcome\");\n    printf(\"%d\", x);\n}",
+      "output": "welcome7",
+      "explanation": "printf(\"welcome\") returns 7 (number of characters printed).",
+      "options": [
+        "welcome7",
+        "welcome",
+        "7welcome",
+        "None of these"
+      ]
+    },
+    {
+      "title": "35. Nested Printf Return Value",
+      "code": "int main()\n{\n    printf(\"%d\", printf(\"%d\", 1234));\n}",
+      "output": "12344",
+      "explanation": "Inner printf prints 1234 and returns 4, outer printf prints 4.",
+      "options": [
+        "12344",
+        "1234",
+        "44",
+        "None of these"
+      ]
+    },
+    {
+      "title": "36. Array Size",
+      "code": "int main()\n{\n    int a[5] = {1,2,3,4,5};\n    printf(\"%d\", sizeof(a)/sizeof(int));\n}",
+      "output": "5",
+      "explanation": "sizeof(a) gives total bytes, divided by sizeof(int) gives array length.",
+      "options": [
+        "5",
+        "25",
+        "4",
+        "None of these"
+      ]
+    },
+    {
+      "title": "37. Printf in Switch",
+      "code": "void main()\n{\n    int b=12;\n    switch(printf(\"%c%d\", 't', b))\n    {\n        case 0: printf(\"Hello\"); break;\n        case 1: printf(\"Bye\"); break;\n        case 5: printf(\"Welcome\"); break;\n        default: printf(\"Hi\");\n    }\n}",
+      "output": "t12Hi",
+      "explanation": "printf(\"%c%d\", 't', b) prints t12 and returns 3 (3 characters printed). default case executes.",
+      "options": [
+        "t12Hi",
+        "t12Hello",
+        "t12Bye",
+        "None of these"
+      ]
+    }
+  ]
+}
